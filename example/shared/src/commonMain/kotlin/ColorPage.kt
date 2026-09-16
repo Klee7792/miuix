@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
@@ -61,6 +63,7 @@ private data class ColorBlockData(
 fun ColorPage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val topAppBarScrollBehavior = MiuixScrollBehavior()
@@ -78,7 +81,7 @@ fun ColorPage(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Color",
+                    title = s[Str.Color],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
@@ -100,7 +103,7 @@ fun ColorPage(
                 contentPadding = contentPadding,
             ) {
                 item(key = "current") {
-                    SmallTitle("Current Theme Colors")
+                    SmallTitle(s[Str.CurrentThemeColors])
                     Card(
                         modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp),
                         colors = CardDefaults.defaultColors(color = MiuixTheme.colorScheme.surfaceContainer),
@@ -111,7 +114,7 @@ fun ColorPage(
                     }
                 }
                 item(key = "light") {
-                    SmallTitle("Light Theme Colors")
+                    SmallTitle(s[Str.LightThemeColors])
                     Card(
                         modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp),
                         colors = CardDefaults.defaultColors(color = lightColors.surfaceContainer),
@@ -122,7 +125,7 @@ fun ColorPage(
                     }
                 }
                 item(key = "dynamic_light") {
-                    SmallTitle("Dynamic Light Colors")
+                    SmallTitle(s[Str.DynamicLightColors])
                     Card(
                         modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp),
                         colors = CardDefaults.defaultColors(color = dynLight.surfaceContainer),
@@ -133,7 +136,7 @@ fun ColorPage(
                     }
                 }
                 item(key = "dark") {
-                    SmallTitle("Dark Theme Colors")
+                    SmallTitle(s[Str.DarkThemeColors])
                     Card(
                         modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp),
                         colors = CardDefaults.defaultColors(color = darkColors.surfaceContainer),
@@ -144,7 +147,7 @@ fun ColorPage(
                     }
                 }
                 item(key = "dynamic_dark") {
-                    SmallTitle("Dynamic Dark Colors")
+                    SmallTitle(s[Str.DynamicDarkColors])
                     Card(
                         modifier = Modifier.padding(horizontal = 12.dp),
                         colors = CardDefaults.defaultColors(color = dynDark.surfaceContainer),

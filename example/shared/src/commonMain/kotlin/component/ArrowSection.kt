@@ -20,6 +20,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.Icon
@@ -36,32 +38,33 @@ import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 fun LazyListScope.arrowSection() {
     item(key = "arrow") {
+        val s = LocalStrings.current
         var volume by remember { mutableFloatStateOf(0.5f) }
         val showVolumeDialog = rememberSaveable { mutableStateOf(false) }
         val volumeDialogHoldDown = rememberSaveable { mutableStateOf(false) }
 
-        SmallTitle(text = "Arrow")
+        SmallTitle(text = s[Str.Arrow])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
         ) {
             ArrowPreference(
-                title = "Arrow",
+                title = s[Str.Arrow],
                 startAction = {
                     Box(
                         modifier = Modifier.padding(end = 8.dp),
                     ) {
                         Icon(
                             imageVector = MiuixIcons.Contacts,
-                            contentDescription = "Personal",
+                            contentDescription = s[Str.Personal],
                             tint = MiuixTheme.colorScheme.onBackground,
                         )
                     }
                 },
                 endActions = {
                     Text(
-                        text = "End",
+                        text = s[Str.End],
                         fontSize = MiuixTheme.textStyles.body2.fontSize,
                         color = MiuixTheme.colorScheme.onSurfaceVariantActions,
                     )
@@ -69,7 +72,7 @@ fun LazyListScope.arrowSection() {
                 onClick = {},
             )
             SliderPreference(
-                title = "Volume",
+                title = s[Str.Volume],
                 valueText = "${(volume * 100).toInt()}%",
                 value = volume,
                 onValueChange = { volume = it },
@@ -80,10 +83,10 @@ fun LazyListScope.arrowSection() {
                 holdDownState = volumeDialogHoldDown.value,
             )
             ArrowPreference(
-                title = "Disabled Arrow",
+                title = s[Str.DisabledArrow],
                 endActions = {
                     Text(
-                        text = "End",
+                        text = s[Str.End],
                         fontSize = MiuixTheme.textStyles.body2.fontSize,
                         color = MiuixTheme.colorScheme.disabledOnSecondaryVariant,
                     )
@@ -108,10 +111,11 @@ private fun SliderDialog(
     onVolumeChange: (Float) -> Unit,
     onDismissFinished: () -> Unit,
 ) {
+    val s = LocalStrings.current
     OverlayDialog(
         show = showDialog.value,
-        title = "Adjust Volume",
-        summary = "Enter 0-100",
+        title = s[Str.AdjustVolume],
+        summary = s[Str.Enter0100],
         onDismissRequest = {
             showDialog.value = false
         },
@@ -136,13 +140,13 @@ private fun SliderDialog(
             )
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 TextButton(
-                    text = "Cancel",
+                    text = s[Str.Cancel],
                     onClick = { showDialog.value = false },
                     modifier = Modifier.weight(1f),
                 )
                 Spacer(Modifier.width(20.dp))
                 TextButton(
-                    text = "Confirm",
+                    text = s[Str.Confirm],
                     onClick = {
                         val parsed = text.toIntOrNull()
                         val clamped = parsed?.coerceIn(0, 100) ?: ((volumeState() * 100).toInt())

@@ -32,6 +32,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import component.BackNavigationIcon
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.coroutines.delay
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
@@ -66,6 +68,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun PullToRefreshPage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val navigator = LocalNavigator.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
@@ -82,7 +85,7 @@ fun PullToRefreshPage(
     val blurActive = backdrop != null
     val barColor = if (blurActive) Color.Transparent else MiuixTheme.colorScheme.surface
 
-    val dropdownOptions = remember { listOf("Option 1", "Option 2", "Option 3", "Option 4") }
+    val dropdownOptions = remember(s) { listOf(s[Str.Option1], s[Str.Option2], s[Str.Option3], s[Str.Option4]) }
     var dropdownSelectedOption by remember { mutableIntStateOf(0) }
     var dropdownCount by remember { mutableIntStateOf(6) }
 
@@ -98,7 +101,7 @@ fun PullToRefreshPage(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Popup",
+                    title = s[Str.Popup],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
@@ -114,7 +117,7 @@ fun PullToRefreshPage(
                         ) {
                             Icon(
                                 imageVector = MiuixIcons.Refresh,
-                                contentDescription = "Refresh",
+                                contentDescription = s[Str.Refresh],
                                 tint = MiuixTheme.colorScheme.onBackground,
                             )
                         }
@@ -167,12 +170,12 @@ fun PullToRefreshPage(
                                 onClick = { showSettings = true },
                             ) {
                                 Text(
-                                    text = "Pull Progress: ${(currentPullProgress * 100).toInt()}%",
+                                    text = s.format(Str.PullProgress, (currentPullProgress * 100).toInt()),
                                     style = MiuixTheme.textStyles.body1,
                                     color = MiuixTheme.colorScheme.onSurface,
                                 )
                                 Text(
-                                    text = "Threshold: ${(thresholdValue * 100).toInt()}%",
+                                    text = s.format(Str.Threshold, (thresholdValue * 100).toInt()),
                                     style = MiuixTheme.textStyles.body2,
                                     color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
                                 )
@@ -198,7 +201,7 @@ fun PullToRefreshPage(
                             ) {
                                 if (i % 2 == 0) {
                                     OverlayDropdownPreference(
-                                        title = "OverlayDropdownPref ${i + 1}",
+                                        title = s.format(Str.OverlayDropdownPrefN, i + 1),
                                         items = dropdownOptions,
                                         selectedIndex = dropdownSelectedOption,
                                         onSelectedIndexChange = { newOption ->
@@ -207,7 +210,7 @@ fun PullToRefreshPage(
                                     )
                                 } else {
                                     WindowDropdownPreference(
-                                        title = "WindowDropdownPref ${i + 1}",
+                                        title = s.format(Str.WindowDropdownPrefN, i + 1),
                                         items = dropdownOptions,
                                         selectedIndex = dropdownSelectedOption,
                                         onSelectedIndexChange = { newOption ->
@@ -229,7 +232,7 @@ fun PullToRefreshPage(
     }
 
     WindowBottomSheet(
-        title = "PullToRefresh Settings",
+        title = s[Str.PullToRefreshSettings],
         show = showSettings,
         onDismissRequest = { showSettings = false },
     ) {
@@ -240,11 +243,11 @@ fun PullToRefreshPage(
             ),
         ) {
             SliderPreference(
-                title = "Refresh Threshold",
+                title = s[Str.RefreshThreshold],
                 summary = if (thresholdValue == 0f) {
-                    "Any pull triggers refresh."
+                    s[Str.AnyPullTriggersRefresh]
                 } else {
-                    "Pull ${(thresholdValue * 100).toInt()}% of the drag range to refresh."
+                    s.format(Str.PullToRefreshHint, (thresholdValue * 100).toInt())
                 },
                 value = thresholdValue,
                 onValueChange = { thresholdValue = it },

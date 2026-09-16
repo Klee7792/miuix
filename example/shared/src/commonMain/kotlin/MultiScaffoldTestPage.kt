@@ -22,6 +22,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import component.BackNavigationIcon
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
 import top.yukonga.miuix.kmp.basic.Scaffold
@@ -39,6 +41,7 @@ import utils.BlurredBar
 fun MultiScaffoldTestPage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val blurSupported = isRuntimeShaderSupported()
@@ -60,7 +63,7 @@ fun MultiScaffoldTestPage(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Multi-Scaffold Test",
+                    title = s[Str.MultiScaffoldTest],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
@@ -109,12 +112,12 @@ fun MultiScaffoldTestPage(
                         .background(MiuixTheme.colorScheme.surfaceVariant),
                 ) {
                     Column {
-                        SmallTitle(text = "Top Left")
+                        SmallTitle(text = s[Str.TopLeft])
                         Card(
                             modifier = Modifier.padding(horizontal = 12.dp),
                         ) {
                             OverlayDropdownPreference(
-                                title = "Dropdown",
+                                title = s[Str.Dropdown],
                                 items = dropdownOptions,
                                 selectedIndex = topLeftSelected.intValue,
                                 onSelectedIndexChange = { index -> topLeftSelected.intValue = index },
@@ -129,12 +132,12 @@ fun MultiScaffoldTestPage(
                         .background(MiuixTheme.colorScheme.surfaceVariant),
                 ) {
                     Column {
-                        SmallTitle(text = "Top Right")
+                        SmallTitle(text = s[Str.TopRight])
                         Card(
                             modifier = Modifier.padding(horizontal = 12.dp),
                         ) {
                             OverlayDropdownPreference(
-                                title = "Dropdown",
+                                title = s[Str.Dropdown],
                                 items = dropdownOptions,
                                 selectedIndex = topRightSelected.intValue,
                                 onSelectedIndexChange = { index -> topRightSelected.intValue = index },
@@ -154,12 +157,12 @@ fun MultiScaffoldTestPage(
                         .background(MiuixTheme.colorScheme.surfaceVariant),
                 ) {
                     Column {
-                        SmallTitle(text = "Bottom Left")
+                        SmallTitle(text = s[Str.BottomLeft])
                         Card(
                             modifier = Modifier.padding(horizontal = 12.dp),
                         ) {
                             OverlayDropdownPreference(
-                                title = "Dropdown",
+                                title = s[Str.Dropdown],
                                 items = dropdownOptions,
                                 selectedIndex = bottomLeftSelected.intValue,
                                 onSelectedIndexChange = { index -> bottomLeftSelected.intValue = index },
@@ -174,12 +177,12 @@ fun MultiScaffoldTestPage(
                         .background(MiuixTheme.colorScheme.surfaceVariant),
                 ) {
                     Column {
-                        SmallTitle(text = "Bottom Right")
+                        SmallTitle(text = s[Str.BottomRight])
                         Card(
                             modifier = Modifier.padding(horizontal = 12.dp),
                         ) {
                             OverlayDropdownPreference(
-                                title = "Dropdown",
+                                title = s[Str.Dropdown],
                                 items = dropdownOptions,
                                 selectedIndex = bottomRightSelected.intValue,
                                 onSelectedIndexChange = { index -> bottomRightSelected.intValue = index },

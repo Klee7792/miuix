@@ -1,23 +1,7 @@
 name: Publish to GitHub Packages
 
 on:
-  push:
-    branches: ["main"]
-    tags: ["*"]
-    paths:
-      - "miuix-core/**"
-      - "miuix-ui/**"
-      - "miuix-preference/**"
-      - "miuix-shader/**"
-      - "miuix-blur/**"
-      - "miuix-squircle/**"
-      - "miuix-icons/**"
-      - "miuix-nav/**"
-      - "build-plugins/**"
-      - "gradle/**"
-      - "settings.gradle.kts"
-      - "build.gradle.kts"
-      - "gradle.properties"
+  workflow_dispatch:
 
 concurrency:
   group: publish-${{ github.ref }}

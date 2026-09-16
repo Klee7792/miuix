@@ -12,13 +12,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.SmallTitle
 import top.yukonga.miuix.kmp.preference.RadioButtonPreference
 
 fun LazyListScope.radioButtonSection() {
     item(key = "radioButton") {
-        SmallTitle(text = "RadioButton")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.RadioButton])
         RadioButtonCardsDemo()
         Card(
             modifier = Modifier
@@ -26,8 +29,8 @@ fun LazyListScope.radioButtonSection() {
                 .padding(bottom = 12.dp),
         ) {
             RadioButtonPreference(
-                title = "Disabled RadioButton",
-                summary = "This option is unavailable",
+                title = s[Str.DisabledRadioButton],
+                summary = s[Str.ThisOptionIsUnavailable],
                 selected = true,
                 enabled = false,
                 onClick = {},
@@ -38,9 +41,10 @@ fun LazyListScope.radioButtonSection() {
 
 @Composable
 private fun RadioButtonCardsDemo() {
+    val s = LocalStrings.current
     var selectedIndex by remember { mutableIntStateOf(0) }
 
-    listOf("Option A", "Option B", "Option C").forEachIndexed { index, title ->
+    listOf(s[Str.OptionA], s[Str.OptionB], s[Str.OptionC]).forEachIndexed { index, title ->
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
@@ -48,7 +52,7 @@ private fun RadioButtonCardsDemo() {
         ) {
             RadioButtonPreference(
                 title = title,
-                summary = "Selected: ${selectedIndex == index}",
+                summary = s.format(Str.SelectedState, selectedIndex == index),
                 selected = selectedIndex == index,
                 onClick = { selectedIndex = index },
             )

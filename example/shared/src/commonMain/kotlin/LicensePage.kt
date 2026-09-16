@@ -25,6 +25,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import component.BackNavigationIcon
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.coroutines.CancellationException
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
@@ -49,6 +51,7 @@ import utils.pageScrollModifiers
 fun LicensePage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val blurSupported = isRuntimeShaderSupported()
@@ -82,7 +85,7 @@ fun LicensePage(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Third Party Licenses",
+                    title = s[Str.ThirdPartyLicenses],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,

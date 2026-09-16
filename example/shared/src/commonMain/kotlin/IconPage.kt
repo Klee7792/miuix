@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import component.SearchBarFake
 import component.SearchPager
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.yukonga.miuix.kmp.basic.BasicComponent
@@ -72,6 +74,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun IconsPage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val topAppBarScrollBehavior = MiuixScrollBehavior()
@@ -85,7 +88,7 @@ fun IconsPage(
     }
 
     // Search state
-    var searchStatus by remember { mutableStateOf(SearchStatus(label = "Search icons")) }
+    var searchStatus by remember(s) { mutableStateOf(SearchStatus(label = s[Str.SearchIcons])) }
     val updateSearchStatus: (SearchStatus) -> Unit = { searchStatus = it }
     var searchOffsetY by remember { mutableStateOf(0.dp) }
 
@@ -144,7 +147,7 @@ fun IconsPage(
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 searchStatus.TopAppBarAnim(backgroundColor = barColor) {
                     AdaptiveTopAppBar(
-                        title = "Icon",
+                        title = s[Str.Icon],
                         showTopAppBar = appState.showTopAppBar,
                         isWideScreen = isWideScreen,
                         scrollBehavior = topAppBarScrollBehavior,
@@ -255,13 +258,13 @@ fun IconsPage(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "Name",
+                            text = s[Str.Name],
                             modifier = Modifier.weight(1f),
                             style = MiuixTheme.textStyles.footnote1,
                             color = colorScheme.onSurfaceVariantActions,
                         )
                         Text(
-                            text = "Tap to compare weights",
+                            text = s[Str.TapToCompareWeights],
                             style = MiuixTheme.textStyles.footnote2,
                             color = colorScheme.onSurfaceVariantActions,
                         )
@@ -306,7 +309,7 @@ fun IconsPage(
                             Spacer(modifier = Modifier.size(8.dp))
                             Icon(
                                 imageVector = if (expanded) MiuixIcons.ExpandLess else MiuixIcons.ExpandMore,
-                                contentDescription = if (expanded) "Collapse" else "Expand",
+                                contentDescription = if (expanded) s[Str.Collapse] else s[Str.Expand],
                                 tint = colorScheme.onSurfaceVariantActions,
                                 modifier = Modifier.size(18.dp),
                             )
@@ -325,7 +328,7 @@ fun IconsPage(
                                     ) {
                                         Icon(
                                             imageVector = icons[index],
-                                            contentDescription = "${iconNames[index]} ($label)",
+                                            contentDescription = s.format(Str.IconWeightLabel, iconNames[index], label),
                                             tint = colorScheme.onBackground,
                                             modifier = Modifier.size(28.dp),
                                         )

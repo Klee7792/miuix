@@ -33,6 +33,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Text
 import top.yukonga.miuix.kmp.squircle.squircleBackground
 import top.yukonga.miuix.kmp.theme.MiuixTheme
@@ -50,6 +52,7 @@ import kotlin.math.roundToInt
  */
 @Composable
 fun FPSMonitor(modifier: Modifier = Modifier) {
+    val s = LocalStrings.current
     var stats by remember { mutableStateOf(FpsStats.Empty) }
     var refFps by remember { mutableIntStateOf(0) }
     var parentSize by remember { mutableStateOf(IntSize.Zero) }
@@ -108,7 +111,7 @@ fun FPSMonitor(modifier: Modifier = Modifier) {
                 val secondary = MiuixTheme.colorScheme.onSurfaceSecondary
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(SpanStyle(color = secondary)) { append("AVG ") }
+                        withStyle(SpanStyle(color = secondary)) { append(s[Str.FpsAvgPrefix]) }
                         withStyle(SpanStyle(color = avgColor)) { append(stats.avg.toString()) }
                     },
                     style = MiuixTheme.textStyles.body2,
@@ -120,7 +123,7 @@ fun FPSMonitor(modifier: Modifier = Modifier) {
                 )
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(SpanStyle(color = secondary)) { append("LOW ") }
+                        withStyle(SpanStyle(color = secondary)) { append(s[Str.FpsLowPrefix]) }
                         withStyle(SpanStyle(color = lowColor)) { append(stats.low1.toString()) }
                     },
                     style = MiuixTheme.textStyles.body2,

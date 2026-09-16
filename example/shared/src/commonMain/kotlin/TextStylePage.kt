@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.HorizontalDivider
@@ -55,13 +57,14 @@ private const val SAMPLE_TEXT_NUM = "0123456789 !@#$%&"
 fun TextStylePage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val topAppBarScrollBehavior = MiuixScrollBehavior()
 
     val textStyles = MiuixTheme.textStyles
 
-    val styleEntries = remember(textStyles) {
+    val styleEntries = remember(s, textStyles) {
         listOf(
             TextStyleEntry("title1", textStyles.title1, "32sp"),
             TextStyleEntry("title2", textStyles.title2, "24sp"),
@@ -69,9 +72,9 @@ fun TextStylePage(
             TextStyleEntry("title4", textStyles.title4, "18sp"),
             TextStyleEntry("headline1", textStyles.headline1, "17sp"),
             TextStyleEntry("headline2", textStyles.headline2, "16sp"),
-            TextStyleEntry("subtitle", textStyles.subtitle, "14sp / Bold"),
+            TextStyleEntry("subtitle", textStyles.subtitle, s[Str.TextStyleBoldSpec]),
             TextStyleEntry("main", textStyles.main, "17sp"),
-            TextStyleEntry("paragraph", textStyles.paragraph, "17sp / lineHeight 1.2em"),
+            TextStyleEntry("paragraph", textStyles.paragraph, s[Str.TextStyleLineHeightSpec]),
             TextStyleEntry("body1", textStyles.body1, "16sp"),
             TextStyleEntry("body2", textStyles.body2, "14sp"),
             TextStyleEntry("button", textStyles.button, "17sp"),
@@ -88,7 +91,7 @@ fun TextStylePage(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Text Style",
+                    title = s[Str.TextStyle2],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
@@ -110,7 +113,7 @@ fun TextStylePage(
                 contentPadding = contentPadding,
             ) {
                 item(key = "title_header") {
-                    SmallTitle("Title Styles")
+                    SmallTitle(s[Str.TitleStyles])
                 }
                 item(key = "title_card") {
                     Card(
@@ -128,7 +131,7 @@ fun TextStylePage(
                     }
                 }
                 item(key = "headline_header") {
-                    SmallTitle("Headline Styles")
+                    SmallTitle(s[Str.HeadlineStyles])
                 }
                 item(key = "headline_card") {
                     Card(
@@ -146,7 +149,7 @@ fun TextStylePage(
                     }
                 }
                 item(key = "body_header") {
-                    SmallTitle("Body Styles")
+                    SmallTitle(s[Str.BodyStyles])
                 }
                 item(key = "body_card") {
                     Card(
@@ -164,7 +167,7 @@ fun TextStylePage(
                     }
                 }
                 item(key = "footnote_header") {
-                    SmallTitle("Footnote Styles")
+                    SmallTitle(s[Str.FootnoteStyles])
                 }
                 item(key = "footnote_card") {
                     Card(
@@ -182,7 +185,7 @@ fun TextStylePage(
                     }
                 }
                 item(key = "all_header") {
-                    SmallTitle("All Styles Overview")
+                    SmallTitle(s[Str.AllStylesOverview])
                 }
                 item(key = "all_card") {
                     Card(

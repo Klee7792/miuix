@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.SliderDefaults
 import top.yukonga.miuix.kmp.basic.SmallTitle
@@ -31,7 +33,8 @@ import top.yukonga.miuix.kmp.preference.SliderPreference
 
 fun LazyListScope.sliderSection() {
     item(key = "slider") {
-        SmallTitle(text = "Slider")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.Slider])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
@@ -41,7 +44,7 @@ fun LazyListScope.sliderSection() {
             SliderPreference(
                 value = sliderValue,
                 onValueChange = { sliderValue = it },
-                title = "Normal",
+                title = s[Str.Normal],
                 valueText = "${(sliderValue * 100).toInt()}%",
                 insideMargin = PaddingValues(16.dp, 16.dp, 16.dp, 0.dp),
             )
@@ -49,7 +52,7 @@ fun LazyListScope.sliderSection() {
             SliderPreference(
                 value = stepsValue,
                 onValueChange = { stepsValue = it },
-                title = "Steps",
+                title = s[Str.Steps],
                 valueText = "${stepsValue.toInt()}/200",
                 valueRange = 0f..200f,
                 steps = 199,
@@ -60,7 +63,7 @@ fun LazyListScope.sliderSection() {
             SliderPreference(
                 value = stepsWithKeyPointsValue,
                 onValueChange = { stepsWithKeyPointsValue = it },
-                title = "Steps with Key Points",
+                title = s[Str.StepsWithKeyPoints],
                 valueText = "${stepsWithKeyPointsValue.toInt()}/8",
                 valueRange = 0f..8f,
                 steps = 7,
@@ -72,7 +75,7 @@ fun LazyListScope.sliderSection() {
             SliderPreference(
                 value = customKeyPointsValue,
                 onValueChange = { customKeyPointsValue = it },
-                title = "Custom Key Points",
+                title = s[Str.CustomKeyPoints],
                 valueText = "${customKeyPointsValue.toInt()}%",
                 valueRange = 0f..100f,
                 showKeyPoints = true,
@@ -84,14 +87,14 @@ fun LazyListScope.sliderSection() {
             SliderPreference(
                 value = disabledValue,
                 onValueChange = {},
-                title = "Disabled",
+                title = s[Str.Disabled],
                 valueText = "${(disabledValue * 100).toInt()}%",
                 enabled = false,
             )
         }
 
         // RangeSlider
-        SmallTitle(text = "RangeSlider")
+        SmallTitle(text = s[Str.RangeSlider])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
@@ -101,7 +104,7 @@ fun LazyListScope.sliderSection() {
             RangeSliderPreference(
                 value = rangeValue,
                 onValueChange = { rangeValue = it },
-                title = "Range",
+                title = s[Str.Range],
                 valueText = "${(rangeValue.start * 100).toInt()}% - ${(rangeValue.endInclusive * 100).toInt()}%",
                 insideMargin = PaddingValues(16.dp, 16.dp, 16.dp, 0.dp),
             )
@@ -109,7 +112,7 @@ fun LazyListScope.sliderSection() {
             RangeSliderPreference(
                 value = rangeStepsValue,
                 onValueChange = { rangeStepsValue = it },
-                title = "Range with Key Points",
+                title = s[Str.RangeWithKeyPoints],
                 valueText = "${rangeStepsValue.start.toInt()} - ${rangeStepsValue.endInclusive.toInt()}",
                 valueRange = 0f..8f,
                 steps = 7,
@@ -121,7 +124,7 @@ fun LazyListScope.sliderSection() {
             RangeSliderPreference(
                 value = customRangeValue,
                 onValueChange = { customRangeValue = it },
-                title = "Custom Range Points",
+                title = s[Str.CustomRangePoints],
                 valueText = "${customRangeValue.start.toInt()}% - ${customRangeValue.endInclusive.toInt()}%",
                 valueRange = 0f..100f,
                 showKeyPoints = true,
@@ -133,14 +136,14 @@ fun LazyListScope.sliderSection() {
             RangeSliderPreference(
                 value = disabledRangeValue,
                 onValueChange = {},
-                title = "Disabled",
+                title = s[Str.Disabled],
                 valueText = "${(disabledRangeValue.start * 100).toInt()}% - ${(disabledRangeValue.endInclusive * 100).toInt()}%",
                 enabled = false,
             )
         }
 
         // VerticalSlider
-        SmallTitle(text = "VerticalSlider")
+        SmallTitle(text = s[Str.VerticalSlider])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
@@ -165,7 +168,7 @@ fun LazyListScope.sliderSection() {
                         modifier = Modifier.size(25.dp, 160.dp),
                     )
                     Text(
-                        text = "Normal\n${(verticalValue1 * 100).toInt()}%",
+                        text = s.format(Str.VerticalNormal, "${(verticalValue1 * 100).toInt()}%"),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -185,7 +188,7 @@ fun LazyListScope.sliderSection() {
                         modifier = Modifier.size(25.dp, 160.dp),
                     )
                     Text(
-                        text = "Steps\n${verticalValue2.toInt()}/6",
+                        text = s.format(Str.VerticalSteps, "${verticalValue2.toInt()}/6"),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -206,7 +209,7 @@ fun LazyListScope.sliderSection() {
                         modifier = Modifier.size(25.dp, 160.dp),
                     )
                     Text(
-                        text = "Points\n${verticalValue3.toInt()}/6",
+                        text = s.format(Str.VerticalPoints, "${verticalValue3.toInt()}/6"),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -227,7 +230,7 @@ fun LazyListScope.sliderSection() {
                         modifier = Modifier.size(25.dp, 160.dp),
                     )
                     Text(
-                        text = "Custom\n${verticalValue4.toInt()}%",
+                        text = s.format(Str.VerticalCustom, "${verticalValue4.toInt()}%"),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
@@ -245,7 +248,7 @@ fun LazyListScope.sliderSection() {
                         modifier = Modifier.size(25.dp, 160.dp),
                     )
                     Text(
-                        text = "Disabled\n${(disabledVerticalValue * 100).toInt()}%",
+                        text = s.format(Str.VerticalDisabled, "${(disabledVerticalValue * 100).toInt()}%"),
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),

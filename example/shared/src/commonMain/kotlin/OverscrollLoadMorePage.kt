@@ -30,6 +30,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import component.BackNavigationIcon
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import top.yukonga.miuix.kmp.basic.Card
@@ -51,6 +53,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun OverscrollLoadMorePage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val navigator = LocalNavigator.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
@@ -88,7 +91,7 @@ fun OverscrollLoadMorePage(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Overscroll + Load More",
+                    title = s[Str.OverscrollLoadMore],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
@@ -138,13 +141,13 @@ fun OverscrollLoadMorePage(
                         ),
                     ) {
                         Text(
-                            text = "Fling to the bottom fast: new items load while the bounce-back plays. " +
-                                "Fling again — inertial scrolling must keep working.",
+                            text = s[Str.FlingToTheBottomFastNewItemsLoadWhileTheBoun] +
+                                s[Str.FlingAgainInertialScrollingMustKeepWorking],
                             style = MiuixTheme.textStyles.body2,
                             color = MiuixTheme.colorScheme.onSurface,
                         )
                         Text(
-                            text = "Items: $itemCount · Pages loaded: $loadedPages",
+                            text = s.format(Str.ItemsPagesLoaded, itemCount, loadedPages),
                             modifier = Modifier.padding(top = 8.dp),
                             style = MiuixTheme.textStyles.body2,
                             color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
@@ -170,7 +173,7 @@ fun OverscrollLoadMorePage(
                             .background(MiuixTheme.colorScheme.surfaceContainer),
                     ) {
                         Text(
-                            text = "Item ${i + 1}",
+                            text = s.format(Str.ItemIndex, i + 1),
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
                             style = MiuixTheme.textStyles.body1,
                             color = MiuixTheme.colorScheme.onSurface,
@@ -196,7 +199,7 @@ fun OverscrollLoadMorePage(
                         ) {
                             InfiniteProgressIndicator(size = 20.dp)
                             Text(
-                                text = "Loading more…",
+                                text = s[Str.LoadingMore],
                                 modifier = Modifier.padding(start = 8.dp),
                                 style = MiuixTheme.textStyles.body2,
                                 color = MiuixTheme.colorScheme.onSurfaceVariantSummary,

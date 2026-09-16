@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
@@ -24,7 +26,8 @@ import top.yukonga.miuix.kmp.icon.extended.Info
 
 fun LazyListScope.tooltipSection() {
     item(key = "tooltip") {
-        SmallTitle(text = "Tooltip")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.Tooltip])
         val richState = rememberTooltipState(isPersistent = true)
         Card(
             modifier = Modifier
@@ -39,21 +42,21 @@ fun LazyListScope.tooltipSection() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
-                    TooltipBox(text = "Edit") {
+                    TooltipBox(text = s[Str.Edit]) {
                         IconButton(onClick = {}) {
-                            Icon(imageVector = MiuixIcons.Edit, contentDescription = "Edit")
+                            Icon(imageVector = MiuixIcons.Edit, contentDescription = s[Str.Edit])
                         }
                     }
                     RichTooltipBox(
-                        title = "Rich tooltip",
-                        text = "Rich tooltips show a title, supporting text, and an optional action. " +
-                            "Move onto the tooltip to use the action, or tap outside to dismiss.",
-                        actionText = "Got it",
+                        title = s[Str.RichTooltip],
+                        text = s[Str.RichTooltipsShowATitleSupportingTextAndAnOpt] +
+                            s[Str.MoveOntoTheTooltipToUseTheActionOrTapOutside],
+                        actionText = s[Str.GotIt],
                         onActionClick = {},
                         state = richState,
                     ) {
                         IconButton(onClick = {}) {
-                            Icon(imageVector = MiuixIcons.Info, contentDescription = "Rich tooltip")
+                            Icon(imageVector = MiuixIcons.Info, contentDescription = s[Str.RichTooltip])
                         }
                     }
                 }

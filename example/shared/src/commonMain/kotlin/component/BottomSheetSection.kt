@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
 import top.yukonga.miuix.kmp.basic.Icon
@@ -42,10 +44,11 @@ import top.yukonga.miuix.kmp.utils.overScrollVertical
 import top.yukonga.miuix.kmp.utils.scrollEndHaptic
 import top.yukonga.miuix.kmp.window.WindowBottomSheet
 
-private val BottomSheetDropdownOptions = listOf("Option 1", "Option 2")
+private val BottomSheetDropdownOptionKeys = listOf(Str.Option1, Str.Option2)
 
 fun LazyListScope.bottomSheetSection() {
     item(key = "bottomSheet") {
+        val s = LocalStrings.current
         var showSuperBottomSheet by remember { mutableStateOf(false) }
         var showWindowBottomSheet by remember { mutableStateOf(false) }
         var superBottomSheetHoldDown by remember { mutableStateOf(false) }
@@ -53,15 +56,15 @@ fun LazyListScope.bottomSheetSection() {
         var bottomSheetDropdownSelectedOption by remember { mutableIntStateOf(0) }
         var bottomSheetSuperSwitchState by remember { mutableStateOf(true) }
 
-        SmallTitle(text = "BottomSheet")
+        SmallTitle(text = s[Str.BottomSheet])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
         ) {
             ArrowPreference(
-                title = "BottomSheet (O)",
-                summary = "Click to show an OverlayBottomSheet",
+                title = s[Str.BottomSheetO],
+                summary = s[Str.ClickToShowAnOverlayBottomSheet],
                 onClick = {
                     showSuperBottomSheet = true
                     superBottomSheetHoldDown = true
@@ -69,8 +72,8 @@ fun LazyListScope.bottomSheetSection() {
                 holdDownState = superBottomSheetHoldDown,
             )
             ArrowPreference(
-                title = "BottomSheet (W)",
-                summary = "Click to show a WindowBottomSheet",
+                title = s[Str.BottomSheetW],
+                summary = s[Str.ClickToShowAWindowBottomSheet],
                 onClick = {
                     showWindowBottomSheet = true
                     windowBottomSheetHoldDown = true
@@ -110,21 +113,22 @@ private fun SuperBottomSheetDemo(
     onSwitchCheckedChange: (Boolean) -> Unit,
     onDismissFinished: () -> Unit,
 ) {
+    val s = LocalStrings.current
     var allowDismiss by remember { mutableStateOf(true) }
     var enableNestedScroll by remember { mutableStateOf(true) }
 
     OverlayBottomSheet(
-        title = "BottomSheet (O)",
+        title = s[Str.BottomSheetO],
         show = show,
         allowDismiss = allowDismiss,
         enableNestedScroll = enableNestedScroll,
         onDismissRequest = onDismissRequest,
         onDismissFinished = onDismissFinished,
         startAction = {
-            BottomSheetActionButton(MiuixIcons.Close, "Cancel", onClick = onDismissRequest)
+            BottomSheetActionButton(MiuixIcons.Close, s[Str.Cancel], onClick = onDismissRequest)
         },
         endAction = {
-            BottomSheetActionButton(MiuixIcons.Ok, "Confirm", onClick = onDismissRequest)
+            BottomSheetActionButton(MiuixIcons.Ok, s[Str.Confirm], onClick = onDismissRequest)
         },
     ) {
         BottomSheetContent(
@@ -136,8 +140,8 @@ private fun SuperBottomSheetDemo(
             onSwitchCheckedChange = onSwitchCheckedChange,
         ) {
             OverlayDropdownPreference(
-                title = "DropdownPref (O)",
-                items = BottomSheetDropdownOptions,
+                title = s[Str.DropdownPrefO],
+                items = BottomSheetDropdownOptionKeys.map { s[it] },
                 selectedIndex = dropdownSelectedIndex,
                 onSelectedIndexChange = onDropdownSelectedIndexChange,
             )
@@ -155,11 +159,12 @@ private fun WindowBottomSheetDemo(
     onSwitchCheckedChange: (Boolean) -> Unit,
     onDismissFinished: () -> Unit,
 ) {
+    val s = LocalStrings.current
     var allowDismiss by remember { mutableStateOf(true) }
     var enableNestedScroll by remember { mutableStateOf(true) }
 
     WindowBottomSheet(
-        title = "BottomSheet (W)",
+        title = s[Str.BottomSheetW],
         show = show,
         allowDismiss = allowDismiss,
         enableNestedScroll = enableNestedScroll,
@@ -167,11 +172,11 @@ private fun WindowBottomSheetDemo(
         onDismissFinished = onDismissFinished,
         startAction = {
             val dismissState = LocalDismissState.current
-            BottomSheetActionButton(MiuixIcons.Close, "Cancel", onClick = { dismissState?.invoke() })
+            BottomSheetActionButton(MiuixIcons.Close, s[Str.Cancel], onClick = { dismissState?.invoke() })
         },
         endAction = {
             val dismissState = LocalDismissState.current
-            BottomSheetActionButton(MiuixIcons.Ok, "Confirm", onClick = { dismissState?.invoke() })
+            BottomSheetActionButton(MiuixIcons.Ok, s[Str.Confirm], onClick = { dismissState?.invoke() })
         },
     ) {
         BottomSheetContent(
@@ -183,8 +188,8 @@ private fun WindowBottomSheetDemo(
             onSwitchCheckedChange = onSwitchCheckedChange,
         ) {
             WindowDropdownPreference(
-                title = "DropdownPref (W)",
-                items = BottomSheetDropdownOptions,
+                title = s[Str.DropdownPrefW],
+                items = BottomSheetDropdownOptionKeys.map { s[it] },
                 selectedIndex = dropdownSelectedIndex,
                 onSelectedIndexChange = onDropdownSelectedIndexChange,
             )
@@ -206,6 +211,7 @@ private fun BottomSheetContent(
     onSwitchCheckedChange: (Boolean) -> Unit,
     dropdown: @Composable () -> Unit,
 ) {
+    val s = LocalStrings.current
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
             .scrollEndHaptic()
@@ -213,7 +219,7 @@ private fun BottomSheetContent(
     ) {
         item {
             SmallTitle(
-                text = "Behavior Settings",
+                text = s[Str.BehaviorSettings],
                 insideMargin = PaddingValues(16.dp, 8.dp),
             )
             Card(
@@ -223,14 +229,14 @@ private fun BottomSheetContent(
                 ),
             ) {
                 SwitchPreference(
-                    title = "Allow Dismiss",
-                    summary = "Drag or Back to dismiss",
+                    title = s[Str.AllowDismiss],
+                    summary = s[Str.DragOrBackToDismiss],
                     checked = allowDismiss,
                     onCheckedChange = onAllowDismissChange,
                 )
                 SwitchPreference(
-                    title = "Enable NestedScroll",
-                    summary = "Scroll content vs Drag sheet",
+                    title = s[Str.EnableNestedScroll],
+                    summary = s[Str.ScrollContentVsDragSheet],
                     checked = enableNestedScroll,
                     onCheckedChange = onEnableNestedScrollChange,
                 )
@@ -241,7 +247,7 @@ private fun BottomSheetContent(
             TextField(
                 value = textFieldValue,
                 onValueChange = { textFieldValue = it },
-                label = "TextField",
+                label = s[Str.TextField],
                 modifier = Modifier.padding(bottom = 12.dp),
             )
             Card(
@@ -252,7 +258,7 @@ private fun BottomSheetContent(
             ) {
                 dropdown()
                 SwitchPreference(
-                    title = "SwitchPref",
+                    title = s[Str.SwitchPref],
                     checked = switchChecked,
                     onCheckedChange = onSwitchCheckedChange,
                 )

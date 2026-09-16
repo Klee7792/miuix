@@ -65,6 +65,8 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import component.liquid.IosLiquidGlassNavigationBar
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.job
@@ -133,8 +135,6 @@ private object UIConstants {
     const val TEXT_STYLE_PAGE_INDEX = 3
     const val PAGE_COUNT = 5
     const val GITHUB_URL = "https://github.com/compose-miuix-ui/miuix"
-
-    val PAGE_TITLES = listOf("Home", "Icon", "Color", "TextStyle", "Settings")
 }
 
 enum class FloatingNavigationBarAlignment(val value: Int) {
@@ -157,6 +157,7 @@ fun AppContent(
     padding: PaddingValues,
 ) {
     val appState = LocalAppState.current
+    val s = LocalStrings.current
 
     val pagerState = rememberPagerState(pageCount = { UIConstants.PAGE_COUNT })
     val mainPagerState = rememberMainPagerState(pagerState)
@@ -171,13 +172,13 @@ fun AppContent(
     val backStack = rememberNavBackStack<Route>(Route.Main)
     val navigator = remember { Navigator(backStack) }
 
-    val navigationItems = remember {
+    val navigationItems = remember(s) {
         listOf(
-            NavigationItem(UIConstants.PAGE_TITLES[0], MiuixIcons.Home),
-            NavigationItem(UIConstants.PAGE_TITLES[1], MiuixIcons.Create),
-            NavigationItem(UIConstants.PAGE_TITLES[2], MiuixIcons.Image),
-            NavigationItem(UIConstants.PAGE_TITLES[3], MiuixIcons.Edit),
-            NavigationItem(UIConstants.PAGE_TITLES[4], MiuixIcons.Settings),
+            NavigationItem(s[Str.Home], MiuixIcons.Home),
+            NavigationItem(s[Str.Icon], MiuixIcons.Create),
+            NavigationItem(s[Str.Color], MiuixIcons.Image),
+            NavigationItem(s[Str.TextStyle], MiuixIcons.Edit),
+            NavigationItem(s[Str.Settings], MiuixIcons.Settings),
         )
     }
 
@@ -654,6 +655,7 @@ private fun FloatingToolbar(
     showFloatingToolbar: Boolean,
     floatingToolbarOrientation: Int,
 ) {
+    val s = LocalStrings.current
     AnimatedVisibility(
         visible = showFloatingToolbar,
         enter = fadeIn(),
@@ -671,21 +673,21 @@ private fun FloatingToolbar(
                     IconButton(onClick = { /* Action 1 */ }) {
                         Icon(
                             MiuixIcons.Edit,
-                            contentDescription = "Edit",
+                            contentDescription = s[Str.Edit],
                             tint = iconTint,
                         )
                     }
                     IconButton(onClick = { /* Action 2 */ }) {
                         Icon(
                             MiuixIcons.Delete,
-                            contentDescription = "Delete",
+                            contentDescription = s[Str.Delete],
                             tint = iconTint,
                         )
                     }
                     IconButton(onClick = { /* Action 3 */ }) {
                         Icon(
                             MiuixIcons.More,
-                            contentDescription = "More",
+                            contentDescription = s[Str.More],
                             tint = iconTint,
                         )
                     }

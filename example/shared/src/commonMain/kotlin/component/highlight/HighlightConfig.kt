@@ -3,15 +3,16 @@
 
 package component.highlight
 
+import i18n.Str
 import top.yukonga.miuix.kmp.blur.highlight.Highlight
 
 internal object HighlightConfig {
 
-    enum class Container(val displayName: String) {
-        Disabled("Disabled"),
-        Large("Large Container"),
-        Medium("Medium Container"),
-        Small("Small Container"),
+    enum class Container(val displayName: Str) {
+        Disabled(Str.Disabled),
+        Large(Str.LargeContainer),
+        Medium(Str.MediumContainer),
+        Small(Str.SmallContainer),
     }
 
     fun get(container: Container, isDark: Boolean): Highlight? = when (container) {

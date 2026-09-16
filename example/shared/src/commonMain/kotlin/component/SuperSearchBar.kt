@@ -60,6 +60,8 @@ import androidx.compose.ui.zIndex
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.InputField
 import top.yukonga.miuix.kmp.basic.Text
@@ -83,6 +85,7 @@ fun SearchStatus.SearchPager(
     collapsedCapsuleColor: Color? = null,
     result: LazyListScope.() -> Unit,
 ) {
+    val s = LocalStrings.current
     val searchStatus = this
     val onSearchStatusChangeUpdated = rememberUpdatedState(onSearchStatusChange)
     val searchStatusUpdated = rememberUpdatedState(searchStatus)
@@ -167,7 +170,7 @@ fun SearchStatus.SearchPager(
                 exit = shrinkHorizontally() + slideOutHorizontally(targetOffsetX = { it }),
             ) {
                 Text(
-                    text = "Cancel",
+                    text = s[Str.Cancel],
                     fontWeight = FontWeight.Bold,
                     color = MiuixTheme.colorScheme.primary,
                     modifier = Modifier
@@ -229,6 +232,7 @@ fun SearchBar(
     searchBarTopPadding: () -> Dp = { 12.dp },
     color: Color = MiuixTheme.colorScheme.surfaceContainerHigh,
 ) {
+    val s = LocalStrings.current
     val focusRequester = remember { FocusRequester() }
     var expanded by rememberSaveable { mutableStateOf(false) }
     val onSearchStatusChangeUpdated = rememberUpdatedState(onSearchStatusChange)
@@ -244,7 +248,7 @@ fun SearchBar(
         leadingIcon = {
             Icon(
                 imageVector = MiuixIcons.Basic.Search,
-                contentDescription = "back",
+                contentDescription = s[Str.Back],
                 modifier = Modifier
                     .size(44.dp)
                     .padding(start = 16.dp, end = 8.dp),
@@ -260,7 +264,7 @@ fun SearchBar(
                 Icon(
                     imageVector = MiuixIcons.Basic.SearchCleanup,
                     tint = MiuixTheme.colorScheme.onSurface,
-                    contentDescription = "Clean",
+                    contentDescription = s[Str.Clean],
                     modifier = Modifier
                         .size(44.dp)
                         .padding(start = 8.dp, end = 16.dp)
@@ -303,6 +307,7 @@ fun SearchBarFake(
     searchBarTopPadding: () -> Dp = { 12.dp },
     capsuleColor: Color? = null,
 ) {
+    val s = LocalStrings.current
     InputField(
         query = "",
         onQueryChange = { },
@@ -310,7 +315,7 @@ fun SearchBarFake(
         leadingIcon = {
             Icon(
                 imageVector = MiuixIcons.Basic.Search,
-                contentDescription = "Search",
+                contentDescription = s[Str.Search],
                 modifier = Modifier
                     .size(44.dp)
                     .padding(start = 16.dp, end = 8.dp),

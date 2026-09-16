@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode as ComposeBlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -48,6 +49,8 @@ import androidx.compose.ui.unit.sp
 import component.BackNavigationIcon
 import component.blend.ColorBlendToken
 import component.effect.BgEffectBackground
+import i18n.LocalStrings
+import i18n.Str
 import misc.VersionInfo
 import navigation.Route
 import org.jetbrains.compose.resources.painterResource
@@ -79,12 +82,12 @@ import utils.BlurredBar
 import utils.pageContentPadding
 import utils.pageScrollModifiers
 import utils.rememberBlurBackdrop
-import androidx.compose.ui.graphics.BlendMode as ComposeBlendMode
 
 @Composable
 fun AboutPage(
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val topAppBarScrollBehavior = MiuixScrollBehavior()
     val navigator = LocalNavigator.current
     val lazyListState = rememberLazyListState()
@@ -124,7 +127,7 @@ fun AboutPage(
             )
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 SmallTopAppBar(
-                    title = "About",
+                    title = s[Str.About],
                     scrollBehavior = topAppBarScrollBehavior,
                     color = barColor,
                     titleColor = titleColor,
@@ -159,6 +162,7 @@ private fun AboutContent(
     lazyListState: LazyListState,
     scrollProgressProvider: () -> Float,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val uriHandler = LocalUriHandler.current
@@ -278,7 +282,7 @@ private fun AboutContent(
                             Modifier
                         },
                     ),
-                text = "Miuix for Compose",
+                text = s[Str.MiuixForCompose],
                 color = MiuixTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
                 fontSize = 35.sp,
@@ -292,7 +296,7 @@ private fun AboutContent(
                         scaleY = 1 - (versionCodeProgress * 0.05f)
                     },
                 color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
-                text = "v" + VersionInfo.VERSION_NAME + " (" + VersionInfo.VERSION_CODE + ")",
+                text = s.format(Str.VersionLine, VersionInfo.VERSION_NAME, VersionInfo.VERSION_CODE),
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
             )
@@ -363,7 +367,7 @@ private fun AboutContent(
                             ),
                         ) {
                             ArrowPreference(
-                                title = "View Source",
+                                title = s[Str.ViewSource],
                                 endActions = {
                                     Text(
                                         text = "GitHub",
@@ -374,7 +378,7 @@ private fun AboutContent(
                                 onClick = { uriHandler.openUri("https://github.com/compose-miuix-ui/miuix") },
                             )
                             ArrowPreference(
-                                title = "Join Group",
+                                title = s[Str.JoinGroup],
                                 endActions = {
                                     Text(
                                         text = "Telegram",
@@ -414,7 +418,7 @@ private fun AboutContent(
                             ),
                         ) {
                             ArrowPreference(
-                                title = "License",
+                                title = s[Str.License],
                                 endActions = {
                                     Text(
                                         text = "Apache-2.0",
@@ -427,7 +431,7 @@ private fun AboutContent(
                                 },
                             )
                             ArrowPreference(
-                                title = "Third Party Licenses",
+                                title = s[Str.ThirdPartyLicenses],
                                 onClick = { navigator.push(Route.License) },
                             )
                         }
@@ -445,7 +449,7 @@ private fun AboutContent(
 
     OverlayBottomSheet(
         show = showTextureSet,
-        title = "Background Effect",
+        title = s[Str.BackgroundEffect],
         onDismissRequest = {
             showTextureSet = false
         },
@@ -455,14 +459,14 @@ private fun AboutContent(
             item {
                 val effectVariantOptions = listOf("OS2", "OS3")
                 OverlayDropdownPreference(
-                    title = "Effect Variant",
+                    title = s[Str.EffectVariant],
                     items = effectVariantOptions,
                     selectedIndex = if (isOs3Effect) 1 else 0,
                     onSelectedIndexChange = { isOs3Effect = (it == 1) },
                 )
 
                 SwitchPreference(
-                    title = "Dynamic Background",
+                    title = s[Str.DynamicBackground],
                     checked = dynamicBackground.value,
                     onCheckedChange = {
                         dynamicBackground.value = it
@@ -470,7 +474,7 @@ private fun AboutContent(
                 )
 
                 SwitchPreference(
-                    title = "Full Screen Background",
+                    title = s[Str.FullScreenBackground],
                     checked = isFullScreenBackground.value,
                     onCheckedChange = {
                         isFullScreenBackground.value = it

@@ -4,9 +4,12 @@
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
+import i18n.AppLanguage
 
 @Stable
 data class AppState(
+    // Language
+    val language: Int = AppLanguage.Default.ordinal,
     // Theme
     val colorMode: Int = 0,
     val seedIndex: Int = 0,

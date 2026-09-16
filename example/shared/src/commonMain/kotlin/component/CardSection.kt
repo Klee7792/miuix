@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.CardDefaults
@@ -32,7 +34,8 @@ import top.yukonga.miuix.kmp.utils.PressFeedbackType
 
 fun LazyListScope.cardSection() {
     item(key = "card") {
-        SmallTitle(text = "Card")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.Card])
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,13 +50,13 @@ fun LazyListScope.cardSection() {
         ) {
             Text(
                 color = MiuixTheme.colorScheme.onPrimaryVariant,
-                text = "Card",
+                text = s[Str.Card],
                 fontSize = 19.sp,
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 color = MiuixTheme.colorScheme.onPrimaryVariant,
-                text = "ShowIndication: true",
+                text = s[Str.ShowIndicationTrue],
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Normal,
             )
@@ -69,17 +72,17 @@ fun LazyListScope.cardSection() {
                 modifier = Modifier.weight(1f),
                 insideMargin = PaddingValues(16.dp),
                 pressFeedbackType = PressFeedbackType.Sink,
-                onClick = { println("Card click") },
+                onClick = { println(s[Str.CardClick]) },
                 content = {
                     Text(
                         color = MiuixTheme.colorScheme.onSurface,
-                        text = "Card",
+                        text = s[Str.Card],
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                     )
                     Text(
                         color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
-                        text = "PressFeedback\nType: Sink",
+                        text = s[Str.PressFeedbackNTypeSink],
                         style = MiuixTheme.textStyles.paragraph,
                     )
                 },
@@ -88,17 +91,17 @@ fun LazyListScope.cardSection() {
                 modifier = Modifier.weight(1f),
                 insideMargin = PaddingValues(16.dp),
                 pressFeedbackType = PressFeedbackType.Tilt,
-                onLongPress = { println("Card long press") },
+                onLongPress = { println(s[Str.CardLongPress]) },
                 content = {
                     Text(
                         color = MiuixTheme.colorScheme.onSurface,
-                        text = "Card",
+                        text = s[Str.Card],
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                     )
                     Text(
                         color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
-                        text = "PressFeedback\nType: Tilt",
+                        text = s[Str.PressFeedbackNTypeTilt],
                         style = MiuixTheme.textStyles.paragraph,
                     )
                 },
@@ -110,6 +113,7 @@ fun LazyListScope.cardSection() {
 
 @Composable
 private fun LongPressHoldDownCardDemo() {
+    val s = LocalStrings.current
     var showDialog by rememberSaveable { mutableStateOf(false) }
     var holdDown by rememberSaveable { mutableStateOf(false) }
 
@@ -129,13 +133,13 @@ private fun LongPressHoldDownCardDemo() {
         content = {
             Text(
                 color = MiuixTheme.colorScheme.onSurface,
-                text = "Card",
+                text = s[Str.Card],
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
             )
             Text(
                 color = MiuixTheme.colorScheme.onSurfaceVariantSummary,
-                text = "Long press to show dialog",
+                text = s[Str.LongPressToShowDialog],
                 style = MiuixTheme.textStyles.paragraph,
             )
         },
@@ -143,8 +147,8 @@ private fun LongPressHoldDownCardDemo() {
 
     OverlayDialog(
         show = showDialog,
-        title = "Long Press Action",
-        summary = "Triggered by long pressing the card.",
+        title = s[Str.LongPressAction],
+        summary = s[Str.TriggeredByLongPressingTheCard],
         onDismissRequest = { showDialog = false },
         onDismissFinished = { holdDown = false },
         content = {
@@ -152,13 +156,13 @@ private fun LongPressHoldDownCardDemo() {
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 TextButton(
-                    text = "Cancel",
+                    text = s[Str.Cancel],
                     onClick = { showDialog = false },
                     modifier = Modifier.weight(1f),
                 )
                 Spacer(Modifier.width(20.dp))
                 TextButton(
-                    text = "Confirm",
+                    text = s[Str.Confirm],
                     onClick = { showDialog = false },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.textButtonColorsPrimary(),

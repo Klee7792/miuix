@@ -50,6 +50,8 @@ import component.switchSection
 import component.tabRowSection
 import component.textFieldSection
 import component.tooltipSection
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.BasicComponent
 import top.yukonga.miuix.kmp.basic.DropdownEntry
 import top.yukonga.miuix.kmp.basic.DropdownItem
@@ -79,11 +81,18 @@ import utils.pageContentPadding
 import utils.pageScrollModifiers
 import utils.rememberBlurBackdrop
 
+// Multi-select entries, grouped exactly like the dropdown shows them.
+private val MultiSelectKeys = listOf(
+    listOf(Str.MultiSelectionA1, Str.MultiSelectionA2),
+    listOf(Str.MultiSelectionB1, Str.MultiSelectionB2, Str.MultiSelectionB3),
+)
+
 @Composable
 fun MainPage(
     snackbarHostState: SnackbarHostState,
     padding: PaddingValues,
 ) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     var searchValue by remember { mutableStateOf("") }
@@ -111,10 +120,11 @@ fun MainPage(
         selectedIndex1,
         selectedIndex2,
         selectedIndex3,
+        s,
     ) {
         listOf(
             DropdownEntry(
-                items = listOf("Selection A-1", "Selection A-2")
+                items = listOf(s[Str.SelectionA1], s[Str.SelectionA2])
                     .mapIndexed { index, text ->
                         DropdownItem(
                             text = text,
@@ -124,7 +134,7 @@ fun MainPage(
                     },
             ),
             DropdownEntry(
-                items = listOf("Selection B-1", "Selection B-2", "Selection B-3")
+                items = listOf(s[Str.SelectionB1], s[Str.SelectionB2], s[Str.SelectionB3])
                     .mapIndexed { index, text ->
                         DropdownItem(
                             text = text,
@@ -134,7 +144,7 @@ fun MainPage(
                     },
             ),
             DropdownEntry(
-                items = listOf("Selection C-1", "Selection C-2", "Selection C-3", "Selection C-4")
+                items = listOf(s[Str.SelectionC1], s[Str.SelectionC2], s[Str.SelectionC3], s[Str.SelectionC4])
                     .mapIndexed { index, text ->
                         DropdownItem(
                             text = text,
@@ -154,10 +164,11 @@ fun MainPage(
         cascadingViewIndex,
         cascadingFilterIndex,
         cascadingCollapseOnSelection,
+        s,
     ) {
-        val sortLabels = listOf("Sort by capture date", "Sort by date added")
-        val viewLabels = listOf("Group by date", "Compact")
-        val filterLabels = listOf("All items", "Camera album")
+        val sortLabels = listOf(s[Str.SortByCaptureDate], s[Str.SortByDateAdded])
+        val viewLabels = listOf(s[Str.GroupByDate], s[Str.Compact])
+        val filterLabels = listOf(s[Str.AllItems], s[Str.CameraAlbum])
         listOf(
             DropdownEntry(
                 items = sortLabels.mapIndexed { idx, label ->
@@ -171,14 +182,14 @@ fun MainPage(
             DropdownEntry(
                 items = listOf(
                     DropdownItem(
-                        text = "Collapse On Selection",
+                        text = s[Str.CollapseOnSelection],
                         selected = cascadingCollapseOnSelection,
                         onClick = {
                             cascadingCollapseOnSelection = !cascadingCollapseOnSelection
                         },
                     ),
                     DropdownItem(
-                        text = "View mode",
+                        text = s[Str.ViewMode],
                         children = viewLabels.mapIndexed { idx, label ->
                             DropdownItem(
                                 text = label,
@@ -188,7 +199,7 @@ fun MainPage(
                         },
                     ),
                     DropdownItem(
-                        text = "Filter",
+                        text = s[Str.Filter],
                         children = filterLabels.mapIndexed { idx, label ->
                             DropdownItem(
                                 text = label,
@@ -201,99 +212,72 @@ fun MainPage(
             ),
         )
     }
-    var multiSelectedItems by remember {
-        mutableStateOf(
-            setOf(
-                "Multi selection A-1",
-                "Multi selection B-2",
-                "Multi selection B-3",
-            ),
-        )
-    }
-    val multiSelectItems = remember(multiSelectedItems) {
-        listOf(
+    // The selection is tracked by flat index instead of by label: labels are translated, so a
+    // language switch must not lose which entries are selected. Indices 0/3/4 = A-1, B-2, B-3.
+    var multiSelectedIndices by remember { mutableStateOf(setOf(0, 3, 4)) }
+    val multiSelectItems = remember(multiSelectedIndices, s) {
+        var flatIndex = 0
+        MultiSelectKeys.map { group ->
             DropdownEntry(
-                items = listOf(
-                    "Multi selection A-1",
-                    "Multi selection A-2",
-                ).map { text ->
+                items = group.map { key ->
+                    val index = flatIndex++
                     DropdownItem(
-                        text = text,
-                        selected = text in multiSelectedItems,
+                        text = s[key],
+                        selected = index in multiSelectedIndices,
                         onClick = {
-                            multiSelectedItems =
-                                if (text in multiSelectedItems) {
-                                    multiSelectedItems - text
+                            multiSelectedIndices =
+                                if (index in multiSelectedIndices) {
+                                    multiSelectedIndices - index
                                 } else {
-                                    multiSelectedItems + text
+                                    multiSelectedIndices + index
                                 }
                         },
                     )
                 },
-            ),
-            DropdownEntry(
-                items = listOf(
-                    "Multi selection B-1",
-                    "Multi selection B-2",
-                    "Multi selection B-3",
-                ).map { text ->
-                    DropdownItem(
-                        text = text,
-                        selected = text in multiSelectedItems,
-                        onClick = {
-                            multiSelectedItems =
-                                if (text in multiSelectedItems) {
-                                    multiSelectedItems - text
-                                } else {
-                                    multiSelectedItems + text
-                                }
-                        },
-                    )
-                },
-            ),
-        )
+            )
+        }
     }
 
     Scaffold(
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Home",
+                    title = s[Str.Home],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
                     color = barColor,
                     actions = {
-                        TooltipBox(text = "Options") {
+                        TooltipBox(text = s[Str.Options]) {
                             OverlayIconCascadingDropdownMenu(
                                 entries = cascadingEntries,
                                 collapseOnSelection = cascadingCollapseOnSelection,
                             ) {
                                 Icon(
                                     imageVector = MiuixIcons.Tune,
-                                    contentDescription = "Tune",
+                                    contentDescription = s[Str.Tune],
                                 )
                             }
                         }
-                        TooltipBox(text = "Sort") {
+                        TooltipBox(text = s[Str.Sort]) {
                             OverlayIconDropdownMenu(
                                 entries = optionItems,
                                 collapseOnSelection = false,
                             ) {
                                 Icon(
                                     imageVector = MiuixIcons.Sort,
-                                    contentDescription = "Sort",
+                                    contentDescription = s[Str.Sort],
                                 )
                             }
                         }
-                        TooltipBox(text = "Select all") {
+                        TooltipBox(text = s[Str.SelectAll]) {
                             OverlayIconDropdownMenu(
                                 entries = multiSelectItems,
                                 collapseOnSelection = false,
                             ) {
                                 Icon(
                                     imageVector = MiuixIcons.SelectAll,
-                                    contentDescription = "SelectAll",
+                                    contentDescription = s[Str.SelectAll2],
                                 )
                             }
                         }
@@ -324,7 +308,7 @@ fun MainPage(
                                 onSearch = { expanded = false },
                                 expanded = expanded,
                                 onExpandedChange = { expanded = it },
-                                label = "Search",
+                                label = s[Str.Search],
                             )
                         },
                         outsideEndAction = {
@@ -336,7 +320,7 @@ fun MainPage(
                                         indication = null,
                                         onClick = onCancelSearch,
                                     ),
-                                text = "Cancel",
+                                text = s[Str.Cancel],
                                 style = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Bold),
                                 color = MiuixTheme.colorScheme.primary,
                             )
@@ -346,7 +330,7 @@ fun MainPage(
                     ) {
                         Column {
                             repeat(4) { idx ->
-                                val resultText = "Suggestion $idx"
+                                val resultText = s.format(Str.SuggestionIndex, idx)
                                 BasicComponent(
                                     title = resultText,
                                     onClick = {

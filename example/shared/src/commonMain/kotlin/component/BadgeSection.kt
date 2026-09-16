@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Badge
 import top.yukonga.miuix.kmp.basic.BadgedBox
 import top.yukonga.miuix.kmp.basic.Card
@@ -26,7 +28,8 @@ import top.yukonga.miuix.kmp.icon.extended.Settings
 
 fun LazyListScope.badgeSection() {
     item(key = "badge") {
-        SmallTitle(text = "Badge")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.Badge])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
@@ -44,28 +47,28 @@ fun LazyListScope.badgeSection() {
                     BadgedBox(badge = { Badge() }) {
                         Icon(
                             imageVector = MiuixIcons.Messages,
-                            contentDescription = "Messages",
+                            contentDescription = s[Str.Messages],
                             modifier = Modifier.size(28.dp),
                         )
                     }
                     BadgedBox(badge = { Badge { Text("8") } }) {
                         Icon(
                             imageVector = MiuixIcons.Email,
-                            contentDescription = "Email",
+                            contentDescription = s[Str.Email],
                             modifier = Modifier.size(28.dp),
                         )
                     }
                     BadgedBox(badge = { Badge { Text("99+") } }) {
                         Icon(
                             imageVector = MiuixIcons.Settings,
-                            contentDescription = "Settings",
+                            contentDescription = s[Str.Settings],
                             modifier = Modifier.size(28.dp),
                         )
                     }
                     BadgedBox(badge = { Badge { Text("5") } }) {
                         Icon(
                             imageVector = MiuixIcons.Favorites,
-                            contentDescription = "Favorites",
+                            contentDescription = s[Str.Favorites],
                             modifier = Modifier.size(28.dp),
                         )
                     }

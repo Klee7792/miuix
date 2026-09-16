@@ -12,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.DropdownEntry
 import top.yukonga.miuix.kmp.basic.DropdownItem
@@ -21,25 +23,26 @@ import top.yukonga.miuix.kmp.preference.WindowDropdownPreference
 
 fun LazyListScope.dropdownSection() {
     item(key = "dropdown") {
+        val s = LocalStrings.current
         var overlayDropdownOptionSelected by remember { mutableIntStateOf(0) }
         var windowDropdownOptionSelected by remember { mutableIntStateOf(0) }
         var overlayExpanded by remember { mutableStateOf(false) }
         var windowExpanded by remember { mutableStateOf(false) }
-        val dropdownOptions = remember { listOf("Option 1", "Option 2", "Option 3", "Option 4") }
-        val dropdownLongOptions = remember {
+        val dropdownOptions = remember(s) { listOf(s[Str.Option1], s[Str.Option2], s[Str.Option3], s[Str.Option4]) }
+        val dropdownLongOptions = remember(s) {
             listOf(
-                "Option 1",
-                "Long Option 2",
-                "Long Long Option 3",
-                "Long Long Long Option 4",
-                "Long Long Long Long Option 5",
-                "Long Long Long Long Long Option 6",
-                "Long Long Long Long Long Long Option 7",
-                "Long Long Long Long Long Long Long Option 8",
-                "Long Long Long Long Long Long Long Long Option 9",
-                "Long Long Long Long Long Long Long Long Long Option 10",
-                "Long Long Long Long Long Long Long Long Long Long Option 11",
-                "Long Long Long Long Long Long Long Long Long Long Long Option 12",
+                s[Str.Option1],
+                s[Str.LongOption2],
+                s[Str.LongOption3],
+                s[Str.LongOption4],
+                s[Str.LongOption5],
+                s[Str.LongOption6],
+                s[Str.LongOption7],
+                s[Str.LongOption8],
+                s[Str.LongOption9],
+                s[Str.LongOption10],
+                s[Str.LongOption11],
+                s[Str.LongOption12],
             )
         }
 
@@ -51,10 +54,11 @@ fun LazyListScope.dropdownSection() {
             overlayGroup1DropdownOptionSelected,
             overlayGroup2DropdownOptionSelected,
             overlayGroup3DropdownOptionSelected,
+            s,
         ) {
             listOf(
                 DropdownEntry(
-                    items = listOf("Option A-1", "Option A-2")
+                    items = listOf(s[Str.OptionA1], s[Str.OptionA2])
                         .mapIndexed { index, text ->
                             DropdownItem(
                                 text = text,
@@ -64,7 +68,7 @@ fun LazyListScope.dropdownSection() {
                         },
                 ),
                 DropdownEntry(
-                    items = listOf("Option B-1", "Option B-2", "Option B-3")
+                    items = listOf(s[Str.OptionB1], s[Str.OptionB2], s[Str.OptionB3])
                         .mapIndexed { index, text ->
                             DropdownItem(
                                 text = text,
@@ -74,7 +78,7 @@ fun LazyListScope.dropdownSection() {
                         },
                 ),
                 DropdownEntry(
-                    items = listOf("Option C-1", "Option C-2", "Option C-3", "Option C-4")
+                    items = listOf(s[Str.OptionC1], s[Str.OptionC2], s[Str.OptionC3], s[Str.OptionC4])
                         .mapIndexed { index, string ->
                             DropdownItem(
                                 text = string,
@@ -95,10 +99,11 @@ fun LazyListScope.dropdownSection() {
             windowGroup1DropdownOptionSelected,
             windowGroup2DropdownOptionSelected,
             windowGroup3DropdownOptionSelected,
+            s,
         ) {
             listOf(
                 DropdownEntry(
-                    items = listOf("Option A-1", "Option A-2")
+                    items = listOf(s[Str.OptionA1], s[Str.OptionA2])
                         .mapIndexed { index, text ->
                             DropdownItem(
                                 text = text,
@@ -108,7 +113,7 @@ fun LazyListScope.dropdownSection() {
                         },
                 ),
                 DropdownEntry(
-                    items = listOf("Option B-1", "Option B-2", "Option B-3")
+                    items = listOf(s[Str.OptionB1], s[Str.OptionB2], s[Str.OptionB3])
                         .mapIndexed { index, text ->
                             DropdownItem(
                                 text = text,
@@ -118,7 +123,7 @@ fun LazyListScope.dropdownSection() {
                         },
                 ),
                 DropdownEntry(
-                    items = listOf("Option C-1", "Option C-2", "Option C-3", "Option C-4")
+                    items = listOf(s[Str.OptionC1], s[Str.OptionC2], s[Str.OptionC3], s[Str.OptionC4])
                         .mapIndexed { index, string ->
                             DropdownItem(
                                 text = string,
@@ -131,15 +136,15 @@ fun LazyListScope.dropdownSection() {
             )
         }
 
-        SmallTitle(text = "Dropdown")
+        SmallTitle(text = s[Str.Dropdown])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
         ) {
             OverlayDropdownPreference(
-                title = "DropdownPref (O)",
-                summary = if (overlayExpanded) "Expanded" else "Collapsed",
+                title = s[Str.DropdownPrefO],
+                summary = if (overlayExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 items = dropdownOptions,
                 selectedIndex = overlayDropdownOptionSelected,
                 onSelectedIndexChange = { newOption ->
@@ -148,8 +153,8 @@ fun LazyListScope.dropdownSection() {
                 onExpandedChange = { overlayExpanded = it },
             )
             WindowDropdownPreference(
-                title = "DropdownPref (W)",
-                summary = if (windowExpanded) "Expanded" else "Collapsed",
+                title = s[Str.DropdownPrefW],
+                summary = if (windowExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 items = dropdownLongOptions,
                 selectedIndex = windowDropdownOptionSelected,
                 onSelectedIndexChange = { newOption ->
@@ -158,29 +163,29 @@ fun LazyListScope.dropdownSection() {
                 onExpandedChange = { windowExpanded = it },
             )
             OverlayDropdownPreference(
-                title = "Grouped DropdownPref (O)",
-                summary = if (overlayGroupedExpanded) "Expanded" else "Collapsed",
+                title = s[Str.GroupedDropdownPrefO],
+                summary = if (overlayGroupedExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 entries = overlayMultiGroupOptions,
                 collapseOnSelection = false,
                 onExpandedChange = { overlayGroupedExpanded = it },
             )
             WindowDropdownPreference(
-                title = "Grouped DropdownPref (W)",
-                summary = if (windowGroupedExpanded) "Expanded" else "Collapsed",
+                title = s[Str.GroupedDropdownPrefW],
+                summary = if (windowGroupedExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 entries = windowMultiGroupOptions,
                 collapseOnSelection = false,
                 onExpandedChange = { windowGroupedExpanded = it },
             )
             OverlayDropdownPreference(
-                title = "Disabled DropdownPref (O)",
-                items = listOf("Option 1"),
+                title = s[Str.DisabledDropdownPrefO],
+                items = listOf(s[Str.Option1]),
                 selectedIndex = 0,
                 onSelectedIndexChange = {},
                 enabled = false,
             )
             WindowDropdownPreference(
-                title = "Disabled DropdownPref (W)",
-                items = listOf("Option 1"),
+                title = s[Str.DisabledDropdownPrefW],
+                items = listOf(s[Str.Option1]),
                 selectedIndex = 0,
                 onSelectedIndexChange = {},
                 enabled = false,

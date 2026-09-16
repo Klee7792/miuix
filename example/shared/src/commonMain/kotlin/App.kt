@@ -12,6 +12,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.unit.dp
+import i18n.AppLanguage
+import i18n.LocalStrings
+import i18n.Strings
+import i18n.resolveIsChinese
 import kotlinx.coroutines.flow.drop
 import top.yukonga.miuix.kmp.squircle.LocalSquircleEnabled
 import ui.AppTheme
@@ -34,6 +38,13 @@ fun App(
             .collect { currentOnColorModeChange?.invoke(it) }
     }
 
+    // Follow the system language when the setting is "System"; anything that is not Chinese
+    // falls back to English.
+    val isChinese = remember(appState.language) {
+        resolveIsChinese(AppLanguage.fromIndex(appState.language))
+    }
+    val strings = remember(isChinese) { Strings(isChinese) }
+
     val keyColor = keyColorFor(appState.seedIndex)
 
     AppTheme(
@@ -45,6 +56,7 @@ fun App(
         CompositionLocalProvider(
             LocalAppState provides appState,
             LocalUpdateAppState provides updateAppState,
+            LocalStrings provides strings,
             LocalSquircleEnabled provides appState.enableSquircle,
         ) {
             AppContent(padding = padding)

@@ -16,6 +16,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.coroutines.launch
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
@@ -27,7 +29,8 @@ import top.yukonga.miuix.kmp.basic.TextButton
 
 fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
     item(key = "snackbar") {
-        SmallTitle(text = "Snackbar")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.Snackbar])
         val scope = rememberCoroutineScope()
         Card(
             modifier = Modifier
@@ -45,7 +48,7 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     TextButton(
-                        text = "Dismiss oldest",
+                        text = s[Str.DismissOldest],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.oldestSnackbarData()?.dismiss()
@@ -54,7 +57,7 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                         modifier = Modifier.weight(1f),
                     )
                     TextButton(
-                        text = "Dismiss newest",
+                        text = s[Str.DismissNewest],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.newestSnackbarData()?.dismiss()
@@ -68,20 +71,20 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     TextButton(
-                        text = "Short (4s)",
+                        text = s[Str.Short4s],
                         onClick = {
                             scope.launch {
-                                snackbarHostState.showSnackbar("This message stays for 4 seconds.")
+                                snackbarHostState.showSnackbar(s[Str.ThisMessageStaysFor4Seconds])
                             }
                         },
                         modifier = Modifier.weight(1f),
                     )
                     TextButton(
-                        text = "Long (10s)",
+                        text = s[Str.Long10s],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    message = "This is a longer message that stays for 10 seconds.",
+                                    message = s[Str.ThisIsALongerMessageThatStaysFor10Seconds],
                                     duration = SnackbarDuration.Long,
                                 )
                             }
@@ -94,31 +97,31 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     TextButton(
-                        text = "Custom (2s)",
+                        text = s[Str.Custom2s],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    message = "This message uses a custom 2-second duration.",
+                                    message = s[Str.ThisMessageUsesACustom2SecondDuration],
                                     duration = SnackbarDuration.Custom(2000L),
                                 )
                             }
                         },
                         modifier = Modifier.weight(1f),
                     )
-                    var text by remember { mutableStateOf("Action") }
+                    var text by remember(s) { mutableStateOf(s[Str.Action]) }
                     TextButton(
                         text = text,
                         onClick = {
                             scope.launch {
-                                text = "Action: Alive"
+                                text = s[Str.ActionAlive]
                                 val result = snackbarHostState.showSnackbar(
-                                    message = "This message has an action button.",
-                                    actionLabel = "Undo",
+                                    message = s[Str.ThisMessageHasAnActionButton],
+                                    actionLabel = s[Str.Undo],
                                     duration = SnackbarDuration.Short,
                                 )
                                 text = when (result) {
-                                    SnackbarResult.ActionPerformed -> "Action: Undo"
-                                    else -> "Action: Expired"
+                                    SnackbarResult.ActionPerformed -> s[Str.ActionUndo]
+                                    else -> s[Str.ActionExpired]
                                 }
                             }
                         },
@@ -131,11 +134,11 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     TextButton(
-                        text = "Dismissible",
+                        text = s[Str.Dismissible],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    message = "Tap the close button to dismiss this message.",
+                                    message = s[Str.TapTheCloseButtonToDismissThisMessage],
                                     withDismissAction = true,
                                     duration = SnackbarDuration.Long,
                                 )
@@ -144,11 +147,11 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                         modifier = Modifier.weight(1f),
                     )
                     TextButton(
-                        text = "Indefinite",
+                        text = s[Str.Indefinite],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    message = "This message stays until you dismiss it manually.",
+                                    message = s[Str.ThisMessageStaysUntilYouDismissItManually],
                                     withDismissAction = true,
                                     duration = SnackbarDuration.Indefinite,
                                 )
@@ -162,12 +165,12 @@ fun LazyListScope.snackbarSection(snackbarHostState: SnackbarHostState) {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     TextButton(
-                        text = "Action + Close",
+                        text = s[Str.ActionClose],
                         onClick = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    message = "This message has both an action and a close button.",
-                                    actionLabel = "Undo",
+                                    message = s[Str.ThisMessageHasBothAnActionAndACloseButton],
+                                    actionLabel = s[Str.Undo],
                                     withDismissAction = true,
                                     duration = SnackbarDuration.Long,
                                 )

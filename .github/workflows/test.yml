@@ -1,20 +1,7 @@
 name: Build All Tests
 
 on:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - "README.md"
-      - "CLAUDE.md"
-      - "AGENTS.md"
-      - "docs/**"
-  pull_request:
-    branches: ["main"]
-    paths-ignore:
-      - "README.md"
-      - "CLAUDE.md"
-      - "AGENTS.md"
-      - "docs/**"
+  workflow_dispatch:
 
 permissions:
   contents: read

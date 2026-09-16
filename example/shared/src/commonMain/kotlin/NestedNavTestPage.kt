@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import component.BackNavigationIcon
+import i18n.LocalStrings
+import i18n.Str
 import kotlinx.serialization.Serializable
 import navigation.Route
 import top.yukonga.miuix.kmp.basic.BasicComponent
@@ -61,6 +63,7 @@ private sealed interface InnerRoute : NavKey {
  */
 @Composable
 fun NestedNavTestPage(padding: PaddingValues) {
+    val s = LocalStrings.current
     val appState = LocalAppState.current
     val isWideScreen = LocalIsWideScreen.current
     val blurSupported = isRuntimeShaderSupported()
@@ -82,7 +85,7 @@ fun NestedNavTestPage(padding: PaddingValues) {
         topBar = {
             BlurredBar(backdrop, blurActive, topAppBarScrollBehavior) {
                 AdaptiveTopAppBar(
-                    title = "Nested Navigation",
+                    title = s[Str.NestedNavigation],
                     showTopAppBar = appState.showTopAppBar,
                     isWideScreen = isWideScreen,
                     scrollBehavior = topAppBarScrollBehavior,
@@ -117,13 +120,11 @@ fun NestedNavTestPage(padding: PaddingValues) {
             ) {
                 item(key = "nested_hint") {
                     Column {
-                        SmallTitle(text = "Back semantics")
+                        SmallTitle(text = s[Str.BackSemantics])
                         Card(modifier = Modifier.padding(horizontal = 12.dp).padding(bottom = 12.dp)) {
                             BasicComponent(
-                                title = "One back stream, nested",
-                                summary = "System back pops the inner stack below first. At inner " +
-                                    "level 1 it falls through and pops this page. While another " +
-                                    "page covers this one, back never touches the inner stack.",
+                                title = s[Str.OneBackStreamNested],
+                                summary = s[Str.NestedBackHint],
                             )
                         }
                     }
@@ -131,7 +132,7 @@ fun NestedNavTestPage(padding: PaddingValues) {
                 item(key = "nested_stack") {
                     val innerBackStack = rememberNavBackStack<InnerRoute>(InnerRoute.Level(1))
                     Column {
-                        SmallTitle(text = "Inner stack")
+                        SmallTitle(text = s[Str.InnerStack])
                         Card(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp)
@@ -178,26 +179,27 @@ private fun InnerLevelContent(
     onPopInner: () -> Unit,
     onPushOuter: () -> Unit,
 ) {
+    val s = LocalStrings.current
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MiuixTheme.colorScheme.surfaceContainer),
     ) {
-        SmallTitle(text = "Level ${List(depth) { it + 1 }.joinToString(" / ")}")
+        SmallTitle(text = s.format(Str.NestedLevel, List(depth) { it + 1 }.joinToString(" / ")))
         ArrowPreference(
-            title = "Push inner level",
-            summary = "System back pops it before this page",
+            title = s[Str.PushInnerLevel],
+            summary = s[Str.SystemBackPopsItBeforeThisPage],
             onClick = onPushInner,
         )
         if (depth > 1) {
             ArrowPreference(
-                title = "Pop inner level",
+                title = s[Str.PopInnerLevel],
                 onClick = onPopInner,
             )
         }
         ArrowPreference(
-            title = "Push an outer page on top",
-            summary = "Back then pops the outer page, not this stack",
+            title = s[Str.PushAnOuterPageOnTop],
+            summary = s[Str.BackThenPopsTheOuterPageNotThisStack],
             onClick = onPushOuter,
         )
     }

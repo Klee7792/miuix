@@ -18,6 +18,9 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
+import i18n.Strings
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.DropdownEntry
 import top.yukonga.miuix.kmp.basic.DropdownItem
@@ -28,6 +31,7 @@ import top.yukonga.miuix.kmp.preference.WindowSpinnerPreference
 
 fun LazyListScope.spinnerSection() {
     item(key = "spinner") {
+        val s = LocalStrings.current
         val superSpinnerOptionSelected = remember { mutableIntStateOf(0) }
         val windowSpinnerOptionSelected = remember { mutableIntStateOf(1) }
         val superSpinnerOptionSelectedDialog = remember { mutableIntStateOf(2) }
@@ -52,65 +56,67 @@ fun LazyListScope.spinnerSection() {
         var windowDialogGroup1SpinnerOptionSelected by remember { mutableIntStateOf(0) }
         var windowDialogGroup2SpinnerOptionSelected by remember { mutableIntStateOf(0) }
         var windowDialogGroup3SpinnerOptionSelected by remember { mutableIntStateOf(0) }
-        val spinnerOptions = remember {
+        val spinnerOptions = remember(s) {
             listOf(
                 DropdownItem(
                     icon = {
                         Icon(
                             RoundedRectanglePainter(),
-                            "Icon",
+                            s[Str.Icon],
                             Modifier.padding(end = 12.dp),
                             Color(0xFFFF5B29),
                         )
                     },
-                    text = "Option 1",
-                    summary = "Red",
+                    text = s[Str.Option1],
+                    summary = s[Str.Red],
                 ),
                 DropdownItem(
                     icon = {
                         Icon(
                             RoundedRectanglePainter(),
-                            "Icon",
+                            s[Str.Icon],
                             Modifier.padding(end = 12.dp),
                             Color(0xFF36D167),
                         )
                     },
-                    text = "Option 2",
-                    summary = "Green",
+                    text = s[Str.Option2],
+                    summary = s[Str.Green],
                 ),
                 DropdownItem(
                     icon = {
                         Icon(
                             RoundedRectanglePainter(),
-                            "Icon",
+                            s[Str.Icon],
                             Modifier.padding(end = 12.dp),
                             Color(0xFF3482FF),
                         )
                     },
-                    text = "Option 3",
-                    summary = "Blue",
+                    text = s[Str.Option3],
+                    summary = s[Str.Blue],
                 ),
                 DropdownItem(
                     icon = {
                         Icon(
                             RoundedRectanglePainter(),
-                            "Icon",
+                            s[Str.Icon],
                             Modifier.padding(end = 12.dp),
                             Color(0xFFFFB21D),
                         )
                     },
-                    text = "Option 4",
-                    summary = "Yellow",
+                    text = s[Str.Option4],
+                    summary = s[Str.Yellow],
                 ),
             )
         }
         val overlayGroupedSpinnerOptions = remember(
+            s,
             spinnerOptions,
             overlayGroup1SpinnerOptionSelected,
             overlayGroup2SpinnerOptionSelected,
             overlayGroup3SpinnerOptionSelected,
         ) {
             groupedSpinnerOptions(
+                s = s,
                 spinnerOptions = spinnerOptions,
                 group1SelectedIndex = overlayGroup1SpinnerOptionSelected,
                 onGroup1SelectedIndexChange = { overlayGroup1SpinnerOptionSelected = it },
@@ -121,12 +127,14 @@ fun LazyListScope.spinnerSection() {
             )
         }
         val windowGroupedSpinnerOptions = remember(
+            s,
             spinnerOptions,
             windowGroup1SpinnerOptionSelected,
             windowGroup2SpinnerOptionSelected,
             windowGroup3SpinnerOptionSelected,
         ) {
             groupedSpinnerOptions(
+                s = s,
                 spinnerOptions = spinnerOptions,
                 group1SelectedIndex = windowGroup1SpinnerOptionSelected,
                 onGroup1SelectedIndexChange = { windowGroup1SpinnerOptionSelected = it },
@@ -137,12 +145,14 @@ fun LazyListScope.spinnerSection() {
             )
         }
         val overlayGroupedDialogSpinnerOptions = remember(
+            s,
             spinnerOptions,
             overlayDialogGroup1SpinnerOptionSelected,
             overlayDialogGroup2SpinnerOptionSelected,
             overlayDialogGroup3SpinnerOptionSelected,
         ) {
             groupedSpinnerOptions(
+                s = s,
                 spinnerOptions = spinnerOptions,
                 group1SelectedIndex = overlayDialogGroup1SpinnerOptionSelected,
                 onGroup1SelectedIndexChange = { overlayDialogGroup1SpinnerOptionSelected = it },
@@ -153,12 +163,14 @@ fun LazyListScope.spinnerSection() {
             )
         }
         val windowGroupedDialogSpinnerOptions = remember(
+            s,
             spinnerOptions,
             windowDialogGroup1SpinnerOptionSelected,
             windowDialogGroup2SpinnerOptionSelected,
             windowDialogGroup3SpinnerOptionSelected,
         ) {
             groupedSpinnerOptions(
+                s = s,
                 spinnerOptions = spinnerOptions,
                 group1SelectedIndex = windowDialogGroup1SpinnerOptionSelected,
                 onGroup1SelectedIndexChange = { windowDialogGroup1SpinnerOptionSelected = it },
@@ -169,86 +181,86 @@ fun LazyListScope.spinnerSection() {
             )
         }
 
-        SmallTitle(text = "Spinner")
+        SmallTitle(text = s[Str.Spinner])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
         ) {
             OverlaySpinnerPreference(
-                title = "SpinnerPref (O)",
-                summary = if (overlayExpanded) "Expanded" else "Collapsed",
+                title = s[Str.SpinnerPrefO],
+                summary = if (overlayExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 items = spinnerOptions,
                 selectedIndex = superSpinnerOptionSelected.value,
                 onSelectedIndexChange = { newOption -> superSpinnerOptionSelected.value = newOption },
                 onExpandedChange = { overlayExpanded = it },
             )
             WindowSpinnerPreference(
-                title = "SpinnerPref (W)",
-                summary = if (windowExpanded) "Expanded" else "Collapsed",
+                title = s[Str.SpinnerPrefW],
+                summary = if (windowExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 items = spinnerOptions,
                 selectedIndex = windowSpinnerOptionSelected.value,
                 onSelectedIndexChange = { newOption -> windowSpinnerOptionSelected.value = newOption },
                 onExpandedChange = { windowExpanded = it },
             )
             OverlaySpinnerPreference(
-                title = "SpinnerPref (O)",
-                summary = "As Dialog (O)" + if (overlayDialogExpanded) " (Expanded)" else " (Collapsed)",
-                dialogButtonString = "OK",
+                title = s[Str.SpinnerPrefO],
+                summary = s[Str.AsDialogO] + if (overlayDialogExpanded) s[Str.SpinnerSuffixExpanded] else s[Str.SpinnerSuffixCollapsed],
+                dialogButtonString = s[Str.OK],
                 items = spinnerOptions,
                 selectedIndex = superSpinnerOptionSelectedDialog.value,
                 onSelectedIndexChange = { newOption -> superSpinnerOptionSelectedDialog.value = newOption },
                 onExpandedChange = { overlayDialogExpanded = it },
             )
             WindowSpinnerPreference(
-                title = "SpinnerPref (W)",
-                summary = "As Dialog (W)" + if (windowDialogExpanded) " (Expanded)" else " (Collapsed)",
-                dialogButtonString = "OK",
+                title = s[Str.SpinnerPrefW],
+                summary = s[Str.AsDialogW] + if (windowDialogExpanded) s[Str.SpinnerSuffixExpanded] else s[Str.SpinnerSuffixCollapsed],
+                dialogButtonString = s[Str.OK],
                 items = spinnerOptions,
                 selectedIndex = windowSpinnerOptionSelectedDialog.value,
                 onSelectedIndexChange = { newOption -> windowSpinnerOptionSelectedDialog.value = newOption },
                 onExpandedChange = { windowDialogExpanded = it },
             )
             OverlaySpinnerPreference(
-                title = "Grouped SpinnerPref (O)",
-                summary = if (overlayGroupedExpanded) "Expanded" else "Collapsed",
+                title = s[Str.GroupedSpinnerPrefO],
+                summary = if (overlayGroupedExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 entries = overlayGroupedSpinnerOptions,
                 collapseOnSelection = false,
                 onExpandedChange = { overlayGroupedExpanded = it },
             )
             WindowSpinnerPreference(
-                title = "Grouped SpinnerPref (W)",
-                summary = if (windowGroupedExpanded) "Expanded" else "Collapsed",
+                title = s[Str.GroupedSpinnerPrefW],
+                summary = if (windowGroupedExpanded) s[Str.Expanded] else s[Str.Collapsed],
                 entries = windowGroupedSpinnerOptions,
                 collapseOnSelection = false,
                 onExpandedChange = { windowGroupedExpanded = it },
             )
             OverlaySpinnerPreference(
-                title = "Grouped SpinnerPref (O)",
-                summary = "As Dialog (O)" + if (overlayGroupedDialogExpanded) " (Expanded)" else " (Collapsed)",
-                dialogButtonString = "OK",
+                title = s[Str.GroupedSpinnerPrefO],
+                summary = s[Str.AsDialogO] + if (overlayGroupedDialogExpanded) s[Str.SpinnerSuffixExpanded] else s[Str.SpinnerSuffixCollapsed],
+                dialogButtonString = s[Str.OK],
                 entries = overlayGroupedDialogSpinnerOptions,
                 onExpandedChange = { overlayGroupedDialogExpanded = it },
             )
             WindowSpinnerPreference(
-                title = "Grouped SpinnerPref (W)",
-                summary = "As Dialog (W)" + if (windowGroupedDialogExpanded) " (Expanded)" else " (Collapsed)",
-                dialogButtonString = "OK",
+                title = s[Str.GroupedSpinnerPrefW],
+                summary = s[Str.AsDialogW] + if (windowGroupedDialogExpanded) s[Str.SpinnerSuffixExpanded] else s[Str.SpinnerSuffixCollapsed],
+                dialogButtonString = s[Str.OK],
                 entries = windowGroupedDialogSpinnerOptions,
                 onExpandedChange = { windowGroupedDialogExpanded = it },
             )
             OverlaySpinnerPreference(
-                title = "Disabled SpinnerPref (O)",
-                summary = "Collapsed",
-                items = listOf(DropdownItem(text = "Option 5")),
+                title = s[Str.DisabledSpinnerPrefO],
+                summary = s[Str.Collapsed],
+                items = listOf(DropdownItem(text = s[Str.Option5])),
                 selectedIndex = 0,
                 onSelectedIndexChange = {},
                 enabled = false,
             )
             WindowSpinnerPreference(
-                title = "Disabled SpinnerPref (W)",
-                summary = "Collapsed",
-                items = listOf(DropdownItem(text = "Option 6")),
+                title = s[Str.DisabledSpinnerPrefW],
+                summary = s[Str.Collapsed],
+                items = listOf(DropdownItem(text = s[Str.Option6])),
                 selectedIndex = 0,
                 onSelectedIndexChange = {},
                 enabled = false,
@@ -258,6 +270,7 @@ fun LazyListScope.spinnerSection() {
 }
 
 private fun groupedSpinnerOptions(
+    s: Strings,
     spinnerOptions: List<DropdownItem>,
     group1SelectedIndex: Int,
     onGroup1SelectedIndexChange: (Int) -> Unit,
@@ -291,7 +304,7 @@ private fun groupedSpinnerOptions(
     DropdownEntry(
         items = spinnerOptions.mapIndexed { index, item ->
             item.copy(
-                text = "Option ${index + 1}",
+                text = s.format(Str.OptionIndex, index + 1),
                 enabled = index % 2 == 0,
                 selected = group3SelectedIndex == index,
                 onClick = {
