@@ -1,0 +1,245 @@
+name: Build Example App
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-android:
+        description: "Android (debug APK)"
+        type: boolean
+        default: false
+      build-web:
+        description: "Web (Wasm + JS)"
+        type: boolean
+        default: false
+      build-ios:
+        description: "iOS (unsigned IPA)"
+        type: boolean
+        default: false
+      build-macos:
+        description: "macOS arm64 (DMG)"
+        type: boolean
+        default: false
+      build-linux-x64:
+        description: "Linux x64"
+        type: boolean
+        default: false
+      build-linux-arm64:
+        description: "Linux arm64"
+        type: boolean
+        default: false
+      build-windows:
+        description: "Windows x64"
+        type: boolean
+        default: false
+
+concurrency:
+  group: example-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # 根据勾选的平台动态生成桌面构建 matrix（macOS / Linux x64 / Linux arm64 / Windows）
+  prepare-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.gen.outputs.matrix }}
+    steps:
+      - name: Generate desktop matrix from inputs
+        id: gen
+        env:
+          MACOS: ${{ inputs.build-macos }}
+          LINUX_X64: ${{ inputs.build-linux-x64 }}
+          LINUX_ARM64: ${{ inputs.build-linux-arm64 }}
+          WINDOWS: ${{ inputs.build-windows }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import os, json
+
+          m = []
+          if os.environ["MACOS"] == "true":
+              m.append({
+                  "os": "macos-latest",
+                  "platform": "macos arm64",
+                  "build-command": "./gradlew packageDmgNativeReleaseMacosArm64",
+                  "artifact-path": "example/macos/build/compose/binaries/main/native-macosArm64-release-dmg/*.dmg",
+                  "artifact-name": "Miuix-darwin-arm64-dmg.dmg",
+                  "archive": False,
+              })
+          if os.environ["LINUX_X64"] == "true":
+              m.append({
+                  "os": "ubuntu-latest",
+                  "platform": "linux x64",
+                  "build-command": "./gradlew createReleaseDistributable",
+                  "artifact-path": "example/desktop/build/compose/binaries/main-release/app/Miuix",
+                  "artifact-name": "Miuix-linux-x64-bin",
+                  "archive": True,
+              })
+          if os.environ["LINUX_ARM64"] == "true":
+              m.append({
+                  "os": "ubuntu-24.04-arm",
+                  "platform": "linux arm64",
+                  "build-command": "./gradlew createReleaseDistributable",
+                  "artifact-path": "example/desktop/build/compose/binaries/main-release/app/Miuix",
+                  "artifact-name": "Miuix-linux-arm64-bin",
+                  "archive": True,
+              })
+          if os.environ["WINDOWS"] == "true":
+              m.append({
+                  "os": "windows-latest",
+                  "platform": "windows x64",
+                  "build-command": "./gradlew createReleaseDistributable",
+                  "artifact-path": "example/desktop/build/compose/binaries/main-release/app/Miuix",
+                  "artifact-name": "Miuix-windows-x64-exe",
+                  "archive": True,
+              })
+
+          print("matrix=" + json.dumps({"include": m}))
+          PY
+
+  build:
+    needs: prepare-matrix
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{ fromJSON(needs.prepare-matrix.outputs.matrix) }}
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: "zulu"
+          java-version: "21"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Cache Kotlin/Native toolchain
+        if: runner.os == 'macOS'
+        uses: actions/cache@v6
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: ${{ runner.os }}-konan-
+      - name: Build ${{ matrix.platform }} platform
+        run: ${{ matrix.build-command }}
+      - name: Rename ${{ matrix.platform }} artifact
+        run: mv ${{ matrix.artifact-path }} ${{ matrix.artifact-name }}
+        shell: bash
+      - name: Upload Miuix ${{ matrix.platform }} artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact-name }}
+          archive: ${{ matrix.archive }}
+
+  ios:
+    if: ${{ inputs.build-ios == true }}
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: "zulu"
+          java-version: "21"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Cache Kotlin/Native toolchain
+        uses: actions/cache@v6
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('gradle/libs.versions.toml') }}
+          restore-keys: ${{ runner.os }}-konan-
+      - name: Build unsigned iOS IPA
+        shell: bash
+        run: |
+          ./gradlew :example:shared:generateVersionInfo
+          xcodebuild archive \
+            -project example/ios/iosApp.xcodeproj \
+            -scheme 'example [ios]' \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/Miuix.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_ENTITLEMENTS="" \
+            DEVELOPMENT_TEAM=""
+          APP="$RUNNER_TEMP/Miuix.xcarchive/Products/Applications/Miuix.app"
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R "$APP" "$RUNNER_TEMP/Payload/"
+          ( cd "$RUNNER_TEMP" && zip -r -y "$GITHUB_WORKSPACE/Miuix-ios-arm64-unsigned.ipa" Payload )
+      - name: Upload unsigned iOS IPA artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Miuix-ios-arm64-unsigned.ipa
+          path: Miuix-ios-arm64-unsigned.ipa
+          archive: false
+
+  web:
+    if: ${{ inputs.build-web == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: "zulu"
+          java-version: "21"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Build Web (Wasm + JS)
+        run: >
+          ./gradlew :example:web:wasmJsBrowserDistribution
+          :example:web:jsBrowserDistribution
+      - name: Upload Wasm artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Miuix-web-wasm
+          path: example/web/build/dist/wasmJs/productionExecutable
+      - name: Upload JS artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Miuix-web-js
+          path: example/web/build/dist/js/productionExecutable
+
+  android:
+    if: ${{ inputs.build-android == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Sources
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: "zulu"
+          java-version: "21"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Build android debug APK (no signing required)
+        run: ./gradlew :example:android:assembleDebug
+      - name: Rename android debug artifact
+        run: mv example/android/build/outputs/apk/debug/*.apk Miuix-android-universal-debug.apk
+        shell: bash
+      - name: Upload Miuix android debug artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Miuix-android-universal-debug.apk
+          path: Miuix-android-universal-debug.apk
+          archive: false
