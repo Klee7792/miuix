@@ -11,8 +11,7 @@ import platform.Foundation.NSUserDefaults
  * (accessed via NSUserDefaults because NSLocale class members are not
  * resolvable on Kotlin/Native 2.4.20 bindings).
  */
-actual fun systemLanguageTag(): String =
-    NSUserDefaults.standardUserDefaults
-        .stringArrayForKey("AppleLanguages")
-        ?.firstOrNull() as? String
-        ?: "en"
+actual fun systemLanguageTag(): String = NSUserDefaults.standardUserDefaults
+    .stringArrayForKey("AppleLanguages")
+    ?.firstOrNull() as? String
+    ?: "en"

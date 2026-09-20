@@ -53,13 +53,31 @@ private val FloatingToolbarPositionOptions =
     listOf("TopStart", "CenterStart", "BottomStart", "TopEnd", "CenterEnd", "BottomEnd", "TopCenter", "BottomCenter")
 private val FabPositionOptions = listOf("Start", "Center", "End", "EndOverlay")
 private val NavTransitionStyleOptions = listOf("Miuix", "AOSP")
-private val PaletteStyleOptions = ThemePaletteStyle.entries.map { it.name }
-private val ColorSpecOptions = ThemeColorSpec.entries.map { it.name }
 
 // Same order as [ui.KeyColors].
 private val KeyColorLabelKeys =
     listOf(Str.Blue, Str.Green, Str.Purple, Str.Yellow, Str.Orange, Str.Pink, Str.Teal)
-private val PagerGestureModeOptions = listOf("Default", "Cross-Axis", "iOS-like")
+
+// Labels of the palette-style / color-spec dropdowns are resolved through [Str] so that they follow
+// the active language. An exhaustive `when` (instead of a positional list) keeps the option order
+// identical to the enum declaration order - adding an upstream enum value fails the build instead of
+// silently shifting every selection, because `selectedIndex` is the raw enum ordinal.
+private fun ThemePaletteStyle.labelKey(): Str = when (this) {
+    ThemePaletteStyle.TonalSpot -> Str.TonalSpot
+    ThemePaletteStyle.Neutral -> Str.Neutral
+    ThemePaletteStyle.Vibrant -> Str.Vibrant
+    ThemePaletteStyle.Expressive -> Str.Expressive
+    ThemePaletteStyle.Rainbow -> Str.Rainbow
+    ThemePaletteStyle.FruitSalad -> Str.FruitSalad
+    ThemePaletteStyle.Monochrome -> Str.Monochrome
+    ThemePaletteStyle.Fidelity -> Str.Fidelity
+    ThemePaletteStyle.Content -> Str.Content
+}
+
+private fun ThemeColorSpec.labelKey(): Str = when (this) {
+    ThemeColorSpec.Spec2021 -> Str.Spec2021
+    ThemeColorSpec.Spec2025 -> Str.Spec2025
+}
 
 @Composable
 fun SettingsPage(
@@ -130,7 +148,10 @@ private fun SettingsContent(
         )
     }
     val keyColorOptions = remember(s) { listOf(s[Str.Default]) + KeyColorLabelKeys.map { s[it] } }
-    val floatingNavigationBarStyleOptions = remember(s) { listOf(s[Str.Default], "iOS-like") }
+    val paletteStyleOptions = remember(s) { ThemePaletteStyle.entries.map { s[it.labelKey()] } }
+    val colorSpecOptions = remember(s) { ThemeColorSpec.entries.map { s[it.labelKey()] } }
+    val pagerGestureModeOptions = remember(s) { listOf(s[Str.Default], s[Str.CrossAxis], s[Str.IosLike]) }
+    val floatingNavigationBarStyleOptions = remember(s) { listOf(s[Str.Default], s[Str.IosLike]) }
     val floatingToolbarOrientationOptions = remember(s) { listOf(s[Str.Horizontal], s[Str.Vertical]) }
     val blurStyleOptions = remember(s) { listOf(s[Str.Gaussian], s[Str.Progressive]) }
 
@@ -178,13 +199,13 @@ private fun SettingsContent(
                         Column {
                             OverlayDropdownPreference(
                                 title = s[Str.PaletteStyle],
-                                items = PaletteStyleOptions,
+                                items = paletteStyleOptions,
                                 selectedIndex = appState.paletteStyle,
                                 onSelectedIndexChange = { updateAppState { state -> state.copy(paletteStyle = it) } },
                             )
                             OverlayDropdownPreference(
                                 title = s[Str.ColorSpec],
-                                items = ColorSpecOptions,
+                                items = colorSpecOptions,
                                 selectedIndex = appState.colorSpec,
                                 onSelectedIndexChange = { updateAppState { state -> state.copy(colorSpec = it) } },
                             )
@@ -216,8 +237,8 @@ private fun SettingsContent(
                     )
                     AnimatedVisibility(visible = appState.enablePageUserScroll) {
                         OverlayDropdownPreference(
-                            title = "Pager Gesture Mode",
-                            items = PagerGestureModeOptions,
+                            title = s[Str.PagerGestureMode],
+                            items = pagerGestureModeOptions,
                             selectedIndex = appState.pagerInterceptionMode,
                             onSelectedIndexChange = { updateAppState { state -> state.copy(pagerInterceptionMode = it) } },
                         )

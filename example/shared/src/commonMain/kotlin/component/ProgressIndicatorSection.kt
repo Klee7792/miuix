@@ -17,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
 import top.yukonga.miuix.kmp.basic.InfiniteProgressIndicator
 import top.yukonga.miuix.kmp.basic.LinearProgressIndicator
@@ -24,7 +26,8 @@ import top.yukonga.miuix.kmp.basic.SmallTitle
 
 fun LazyListScope.progressIndicatorSection() {
     item(key = "progressIndicator") {
-        SmallTitle(text = "ProgressIndicator")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.ProgressIndicator])
         val progressValues = listOf(0.0f, 0.25f, 0.5f, 0.75f, 1.0f, null)
         val animatedProgressValue by rememberInfiniteTransition().animateFloat(
             initialValue = 0f,

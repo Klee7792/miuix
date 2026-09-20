@@ -178,6 +178,24 @@ enum class Str(val en: String, val zh: String) {
     SwipeAPushedPageToPopItDirectionFollowsLayou("Swipe a pushed page to pop it; direction follows layout", "滑动已入栈页面即可返回；方向跟随布局"),
     Other("Other", "其他"),
     AboutThisExampleApp("About this example App", "关于此示例应用"),
+    PagerGestureMode("Pager Gesture Mode", "翻页手势模式"),
+    CrossAxis("Cross-Axis", "跨轴"),
+    IosLike("iOS-like", "类 iOS"),
+
+    // Palette styles (top.yukonga.miuix.kmp.theme.ThemePaletteStyle); `en` mirrors the enum name.
+    TonalSpot("TonalSpot", "色调点"),
+    Neutral("Neutral", "中性"),
+    Vibrant("Vibrant", "鲜艳"),
+    Expressive("Expressive", "表现力"),
+    Rainbow("Rainbow", "彩虹"),
+    FruitSalad("FruitSalad", "水果沙拉"),
+    Monochrome("Monochrome", "单色"),
+    Fidelity("Fidelity", "保真"),
+    Content("Content", "内容"),
+
+    // Color specs (top.yukonga.miuix.kmp.theme.ThemeColorSpec); `en` mirrors the enum name.
+    Spec2021("Spec2021", "2021 规范"),
+    Spec2025("Spec2025", "2025 规范"),
 
     // ---- TextStylePage.kt
     TextStyle2("Text Style", "文字样式"),
@@ -503,4 +521,14 @@ enum class Str(val en: String, val zh: String) {
     // Pull-to-refresh list demos
     OverlayDropdownPrefN("OverlayDropdownPref {0}", "覆盖层下拉首选项 {0}"),
     WindowDropdownPrefN("WindowDropdownPref {0}", "窗口下拉首选项 {0}"),
+
+    // ---- component section titles (SmallTitle)
+    ColorPickerHsv("ColorPicker (HSV)", "取色器 (HSV)"),
+    ColorPickerOkhsv("ColorPicker (OKHSV)", "取色器 (OKHSV)"),
+    ColorPickerOklab("ColorPicker (OKLAB)", "取色器 (OKLAB)"),
+    ColorPickerOklch("ColorPicker (OKLCH)", "取色器 (OKLCH)"),
+    ColorPalette("ColorPalette", "调色板"),
+    NumberPicker("NumberPicker", "数字选择器"),
+    ProgressIndicator("ProgressIndicator", "进度指示器"),
+    SearchBar("SearchBar", "搜索栏"),
 }

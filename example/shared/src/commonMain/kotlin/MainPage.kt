@@ -298,7 +298,7 @@ fun MainPage(
                 contentPadding = contentPadding,
             ) {
                 item(key = "searchbar") {
-                    SmallTitle(text = "SearchBar")
+                    SmallTitle(text = s[Str.SearchBar])
                     SearchBar(
                         modifier = Modifier.padding(bottom = 12.dp),
                         inputField = {

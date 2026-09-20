@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.ColorPalette
 import top.yukonga.miuix.kmp.basic.ColorPicker
@@ -31,27 +33,32 @@ import kotlin.math.round
 
 fun LazyListScope.colorPickerSection() {
     item(key = "colorPicker-HSV") {
-        SmallTitle(text = "ColorPicker (HSV)")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.ColorPickerHsv])
         ColorPickerCard(colorSpace = ColorSpace.HSV)
     }
 
     item(key = "colorPicker-OKHSV") {
-        SmallTitle(text = "ColorPicker (OKHSV)")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.ColorPickerOkhsv])
         ColorPickerCard(colorSpace = ColorSpace.OKHSV)
     }
 
     item(key = "colorPicker-OKLAB") {
-        SmallTitle(text = "ColorPicker (OKLAB)")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.ColorPickerOklab])
         ColorPickerCard(colorSpace = ColorSpace.OKLAB)
     }
 
     item(key = "colorPicker-OKLCH") {
-        SmallTitle(text = "ColorPicker (OKLCH)")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.ColorPickerOklch])
         ColorPickerCard(colorSpace = ColorSpace.OKLCH)
     }
 
     item(key = "colorPalette") {
-        SmallTitle(text = "ColorPalette")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.ColorPalette])
         val miuixColor = MiuixTheme.colorScheme.primary
         var selectedColor by remember { mutableStateOf(miuixColor) }
         var colorHex by remember(selectedColor) {

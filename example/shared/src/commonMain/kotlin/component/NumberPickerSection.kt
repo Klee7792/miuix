@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import i18n.LocalStrings
+import i18n.Str
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.NumberPicker
 import top.yukonga.miuix.kmp.basic.SmallTitle
@@ -24,7 +26,8 @@ import top.yukonga.miuix.kmp.basic.Text
 
 fun LazyListScope.numberPickerSection() {
     item(key = "numberPicker") {
-        SmallTitle(text = "NumberPicker")
+        val s = LocalStrings.current
+        SmallTitle(text = s[Str.NumberPicker])
         Card(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
