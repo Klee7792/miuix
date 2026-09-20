@@ -59,6 +59,7 @@ private val ColorSpecOptions = ThemeColorSpec.entries.map { it.name }
 // Same order as [ui.KeyColors].
 private val KeyColorLabelKeys =
     listOf(Str.Blue, Str.Green, Str.Purple, Str.Yellow, Str.Orange, Str.Pink, Str.Teal)
+private val PagerGestureModeOptions = listOf("Default", "Cross-Axis", "iOS-like")
 
 @Composable
 fun SettingsPage(
@@ -213,6 +214,14 @@ private fun SettingsContent(
                         checked = appState.enablePageUserScroll,
                         onCheckedChange = { updateAppState { state -> state.copy(enablePageUserScroll = it) } },
                     )
+                    AnimatedVisibility(visible = appState.enablePageUserScroll) {
+                        OverlayDropdownPreference(
+                            title = "Pager Gesture Mode",
+                            items = PagerGestureModeOptions,
+                            selectedIndex = appState.pagerInterceptionMode,
+                            onSelectedIndexChange = { updateAppState { state -> state.copy(pagerInterceptionMode = it) } },
+                        )
+                    }
                     SwitchPreference(
                         title = s[Str.ShowTopAppBar],
                         checked = appState.showTopAppBar,
